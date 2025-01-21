@@ -5,3 +5,6 @@ endif
 
 run-agent:
 	yarn agent
+
+run-server:
+	yarn server
