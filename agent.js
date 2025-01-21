@@ -13,42 +13,15 @@ import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
 import { createOpenAIFunctionsAgent, AgentExecutor } from "langchain/agents";
 
-// Custom Data Source, Vector Stores
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { z } from "zod";
 import { StructuredTool } from "@langchain/core/tools";
 
-// Create Retriever
-const loader = new CheerioWebBaseLoader(
-  "https://js.langchain.com/docs/expression_language/"
-);
-const docs = await loader.load();
 
-const splitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 200,
-  chunkOverlap: 20,
-});
-
-const splitDocs = await splitter.splitDocuments(docs);
-
-const embeddings = new OpenAIEmbeddings();
-
-const vectorStore = await MemoryVectorStore.fromDocuments(
-  splitDocs,
-  embeddings
-);
-
-const retriever = vectorStore.asRetriever({
-  k: 2,
-});
 
 // Instantiate the model
 const model = new ChatOpenAI({
-  modelName: "gpt-3.5-turbo-1106",
-  temperature: 0.2,
+  modelName: "gpt-4o-mini",
+  temperature: 0.7,
 });
 
 // Prompt Template
