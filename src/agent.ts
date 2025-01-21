@@ -6,7 +6,7 @@ import readline from "readline";
 import { ChatOpenAI } from "@langchain/openai";
 import {
   ChatPromptTemplate,
-  MessagesPlaceholder
+  MessagesPlaceholder,
 } from "@langchain/core/prompts";
 
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
@@ -14,13 +14,13 @@ import { HumanMessage, AIMessage } from "@langchain/core/messages";
 import { createOpenAIFunctionsAgent, AgentExecutor } from "langchain/agents";
 
 import { z } from "zod";
-import { StructuredTool, tool } from "@langchain/core/tools";
+import { tool } from "@langchain/core/tools";
 
 const initializeAgent = async () => {
   // Instantiate the model
   const model = new ChatOpenAI({
     modelName: "gpt-4o-mini",
-    temperature: 0.7
+    temperature: 0.7,
   });
 
   // Prompt Template
@@ -30,12 +30,12 @@ const initializeAgent = async () => {
     new MessagesPlaceholder("chat_history"),
     "human",
     "{input}",
-    new MessagesPlaceholder("agent_scratchpad")
+    new MessagesPlaceholder("agent_scratchpad"),
   ]);
 
   const adderSchema = z.object({
     a: z.number(),
-    b: z.number()
+    b: z.number(),
   });
   const adderTool = tool(
     async (input): Promise<string> => {
@@ -45,30 +45,28 @@ const initializeAgent = async () => {
     {
       name: "adder",
       description: "Adds two numbers together",
-      schema: adderSchema
+      schema: adderSchema,
     }
   );
-
-  await adderTool.invoke({ a: 1, b: 2 });
 
   const tools = [adderTool];
 
   const agent = await createOpenAIFunctionsAgent({
     llm: model,
     prompt,
-    tools
+    tools,
   });
 
   // Create the executor
   const agentExecutor = new AgentExecutor({
     agent,
-    tools
+    tools,
   });
 
   // User Input
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
   return { agentExecutor, rl };
@@ -87,7 +85,7 @@ const askQuestion = async () => {
 
     const response = await agentExecutor.invoke({
       input: input,
-      chat_history: chat_history
+      chat_history: chat_history,
     });
 
     console.log("Agent: ", response.output);
