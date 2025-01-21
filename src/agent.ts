@@ -74,9 +74,10 @@ const initializeAgent = async () => {
 
 const chat_history: any[] = [];
 
-const askQuestion = async () => {
-  const { agentExecutor, rl } = await initializeAgent();
-
+const askQuestion = async (
+  agentExecutor: AgentExecutor,
+  rl: readline.Interface
+) => {
   rl.question("User: ", async (input) => {
     if (input.toLowerCase() === "exit") {
       rl.close();
@@ -93,8 +94,11 @@ const askQuestion = async () => {
     chat_history.push(new HumanMessage(input));
     chat_history.push(new AIMessage(response.output));
 
-    askQuestion();
+    askQuestion(agentExecutor, rl);
   });
 };
 
-(async () => await askQuestion())();
+(async () => {
+  const { agentExecutor, rl } = await initializeAgent();
+  await askQuestion(agentExecutor, rl);
+})();
