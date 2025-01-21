@@ -2,13 +2,20 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { Request, Response } from "express";
 import { ChatRequestBody } from "../entity";
 import httpStatus from "http-status";
+import { initializeAgent } from "../../agent";
+import { AgentExecutor } from "langchain/agents";
 
-const chatHistory: { [x: number]: Array<HumanMessage | AIMessage> } = {};
+const chatHistory: {
+  [x: number]: {
+    agent: AgentExecutor;
+    history: Array<HumanMessage | AIMessage>;
+  };
+} = {};
 
-export const chatWithAgent = (
+export const chatWithAgent = async (
   req: Request<{}, {}, ChatRequestBody>,
   res: Response
-): any => {
+): Promise<any> => {
   const { userId, messageReq } = req.body;
 
   try {
@@ -21,13 +28,26 @@ export const chatWithAgent = (
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "invalid messageReq" });
 
-    chatHistory[userId] = [
-      messageReq as any,
-      ...(!chatHistory[userId]?.length ? [] : chatHistory[userId])
-    ];
+    if (!chatHistory[userId]) {
+      const { agentExecutor } = await initializeAgent();
+      chatHistory[userId] = {
+        agent: agentExecutor,
+        history: []
+      };
+    }
+
+    const response = await chatHistory[userId].agent.invoke({
+      input: messageReq,
+      chat_history: chatHistory[userId].history
+    });
+    console.log("Agent res: ", response.output);
+
+    chatHistory[userId].history.push(new HumanMessage(messageReq));
+    chatHistory[userId].history.push(new AIMessage(response.output));
+    console.log("User chat history:", userId, chatHistory);
 
     return res.status(httpStatus.OK).json({
-      data: { chatHistory: chatHistory[userId], userId }
+      data: { agentResponse: response.output, userId }
     });
   } catch (e) {
     console.log(e);
@@ -36,7 +56,3 @@ export const chatWithAgent = (
       .json({ error: "an error occurred" });
   }
 };
-
-// export const chatWithAgent = (req: Request, res: Response) => {
-//   res.send("Express + TypeScript Server");
-// };
