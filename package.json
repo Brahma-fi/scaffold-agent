@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "agent": "ts-node src/agent.ts"
+    "agent": "ts-node src/main.ts"
   },
   "keywords": [],
   "author": "",
