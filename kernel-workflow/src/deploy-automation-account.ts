@@ -1,34 +1,13 @@
-import { ConsoleKit } from "brahma-templates-sdk";
+import {
+  ConsoleKit,
+  PreComputedAddressData,
+  TaskStatusData
+} from "brahma-templates-sdk";
 import { ethers } from "ethers";
 import { erc20Abi, fromHex } from "viem";
 import { poll } from "./utils";
 
 type Address = `0x${string}`;
-type PreComputedAddressData = {
-  precomputedAddress: Address;
-  feeEstimate: string;
-  feeEstimateSignature: string;
-};
-type TaskIdStatusType =
-  | "pending"
-  | "executing"
-  | "cancelled"
-  | "successful"
-  | "failed";
-type TaskStatusData = {
-  taskId: string;
-  metadata: {
-    request: unknown;
-    response: {
-      isSuccessful: boolean;
-      error: string | null;
-      transactionHash: string | null;
-    };
-  };
-  outputTransactionHash: string | null;
-  status: TaskIdStatusType;
-  createdAt: string;
-};
 
 const ownerEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
 const chainId = parseInt(process.env.CHAIN_ID!, 10);
