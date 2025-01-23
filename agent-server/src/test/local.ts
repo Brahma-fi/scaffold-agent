@@ -3,7 +3,7 @@ import readline from "readline";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
 import { AgentExecutor } from "langchain/agents";
-import { initializeAgent } from "./agent";
+import { initializeAgent } from "../agent";
 
 const chat_history: any[] = [];
 

@@ -4,7 +4,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 run-agent:
-	yarn agent
+	cd agent-server && yarn agent
 
 run-server:
-	yarn server
+	cd agent-server && yarn server

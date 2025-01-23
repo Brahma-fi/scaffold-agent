@@ -2,7 +2,7 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { Request, Response } from "express";
 import { ChatRequestBody } from "../entity";
 import httpStatus from "http-status";
-import { initializeAgent } from "../../agent";
+import { initializeAgent } from "../agent";
 import { AgentExecutor } from "langchain/agents";
 
 const chatHistory: {
