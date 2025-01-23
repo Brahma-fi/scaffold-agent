@@ -55,6 +55,7 @@ const registerExecutor = async (
     types,
     message
   );
+  console.log("[executor-console-sig]", executorRegistrationSignature);
 
   try {
     // todo: return registryId
@@ -90,6 +91,7 @@ const registerExecutorOnKernel = async (
     types,
     message
   );
+  console.log("[executor-kernel-sig]", executorRegistrationSignature);
 
   try {
     await _consoleKit.vendorCaller.registerExecutorOnKernel(
@@ -104,3 +106,33 @@ const registerExecutorOnKernel = async (
 
   return await _consoleKit.vendorCaller.fetchExecutorDetails(_registryId);
 };
+
+(async () => {
+  const consoleKit = new ConsoleKit(ConsoleApiKey, ConsoleBaseUrl);
+
+  const provider = new ethers.JsonRpcProvider(JsonRpcUrl);
+  const wallet = new ethers.Wallet(OwnerEoaPK, provider);
+
+  const { chainId: chainIdBig } = await provider.getNetwork();
+  const chainId = parseInt(chainIdBig.toString(), 10);
+
+  // todo: get registryId from here
+  await registerExecutor(
+    consoleKit,
+    chainId,
+    wallet,
+    ExecutorConfigConsole,
+    ExecutorMetadata
+  );
+  // temp:
+  const registryId = "";
+
+  const registeredExecutorData = await registerExecutorOnKernel(
+    consoleKit,
+    chainId,
+    wallet,
+    registryId,
+    ExecutorConfigKernel
+  );
+  console.log("[complete]", { registeredExecutorData });
+})();
