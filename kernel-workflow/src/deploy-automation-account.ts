@@ -120,7 +120,7 @@ const signAndDeployAutomationAccount = async (
     throw new Error("automation account generation data fetch fail");
 
   const {
-    signaturePayload: { domain, message, types, primaryType },
+    signaturePayload: { domain, message, types },
     subAccountPolicyCommit,
     subscriptionDraftID
   } = accountGenerationData;
