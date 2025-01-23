@@ -1,0 +1,20 @@
+{
+  "name": "agent-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "agent": "ts-node src/test/local.ts",
+    "server": "ts-node src/server/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.10.7",
+    "brahma-templates-sdk": "1.0.73",
+    "ethers": "^6.13.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
