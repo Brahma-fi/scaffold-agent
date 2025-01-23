@@ -3,19 +3,30 @@ import {
   PreComputedAddressData,
   TaskStatusData
 } from "brahma-templates-sdk";
-import { ethers } from "ethers";
+import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi, fromHex } from "viem";
 import { poll } from "./utils";
 
 type Address = `0x${string}`;
 
-const ownerEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
-const chainId = parseInt(process.env.CHAIN_ID!, 10);
-const executorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;
-const jsonRpcUrl = process.env.JSON_RPC_URL!;
+const OwnerEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
+const ExecutorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;
+const JsonRpcUrl = process.env.JSON_RPC_URL!;
+const ConsoleApiKey = process.env.CONSOLE_API_KEY!;
+const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
+
+/// configure according to required subscription
+const AutomationSubscriptionParams = {
+  inputToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc
+  inputAmount: BigInt(10000000), // 10 usdc
+  inputTokenPerIterationLimit: BigInt(2000000), // 2 usdc,
+  duration: 86400 // 1 day
+};
 
 const setupPrecomputeBalances = async (
   _consoleKit: ConsoleKit,
+  _provider: JsonRpcProvider,
+  _wallet: Wallet,
   _ownerEoa: Address,
   _ownerEoaPK: string,
   _chainId: number,
@@ -33,12 +44,10 @@ const setupPrecomputeBalances = async (
   const totalDepositAmount = BigInt(precomputedData.feeEstimate) + _inputAmount;
 
   try {
-    const provider = new ethers.JsonRpcProvider(jsonRpcUrl);
-    const wallet = new ethers.Wallet(_ownerEoaPK, provider);
     const inputTokenContract = new ethers.Contract(
       _inputToken,
       erc20Abi,
-      wallet
+      _wallet
     );
 
     await inputTokenContract.transfer(
@@ -50,11 +59,14 @@ const setupPrecomputeBalances = async (
     throw new Error("precompute setup balance fail");
   }
 
+  console.log("[precompute]", { precomputedData });
   return precomputedData;
 };
 
 const signAndDeployAutomationAccount = async (
   _consoleKit: ConsoleKit,
+  _provider: JsonRpcProvider,
+  _wallet: Wallet,
   _ownerEoa: Address,
   _ownerEoaPK: string,
   _chainId: number,
@@ -65,10 +77,11 @@ const signAndDeployAutomationAccount = async (
   _inputTokenPerIterationLimit: bigint,
   _automationDuration: number
 ) => {
-  const provider = new ethers.JsonRpcProvider(jsonRpcUrl);
-  const wallet = new ethers.Wallet(_ownerEoaPK, provider);
-  const inputTokenContract = new ethers.Contract(_inputToken, erc20Abi, wallet);
-
+  const inputTokenContract = new ethers.Contract(
+    _inputToken,
+    erc20Abi,
+    _wallet
+  );
   const inputTokenDecimals = await inputTokenContract.decimals();
 
   const tokens = [_inputToken];
@@ -113,7 +126,7 @@ const signAndDeployAutomationAccount = async (
     subscriptionDraftID
   } = accountGenerationData;
 
-  const deploymentSignature = await wallet.signTypedData(
+  const deploymentSignature = await _wallet.signTypedData(
     {
       verifyingContract: domain.verifyingContract,
       chainId: fromHex(domain.chainId as Address, "number")
@@ -121,6 +134,7 @@ const signAndDeployAutomationAccount = async (
     types,
     message
   );
+  console.log("[dep-signature]", deploymentSignature);
 
   const deployData = await _consoleKit.publicDeployer.deployBrahmaAccount(
     _ownerEoa,
@@ -138,6 +152,7 @@ const signAndDeployAutomationAccount = async (
   );
   if (!deployData) throw new Error("automation account deployment fail");
 
+  console.log("[deploy-init]", deployData.taskId);
   return deployData;
 };
 
@@ -164,3 +179,43 @@ const pollDeploymentStatus = async (
   );
   return taskStatus;
 };
+
+(async () => {
+  const consoleKit = new ConsoleKit(ConsoleApiKey, ConsoleBaseUrl);
+
+  const provider = new ethers.JsonRpcProvider(JsonRpcUrl);
+  const wallet = new ethers.Wallet(OwnerEoaPK, provider);
+
+  const ownerEoaAddress = ethers.computeAddress(OwnerEoaPK) as Address;
+  const { chainId: chainIdBig } = await provider.getNetwork();
+  const chainId = parseInt(chainIdBig.toString(), 10);
+
+  const precomputeData = await setupPrecomputeBalances(
+    consoleKit,
+    provider,
+    wallet,
+    ownerEoaAddress,
+    OwnerEoaPK,
+    chainId,
+    AutomationSubscriptionParams.inputToken,
+    AutomationSubscriptionParams.inputAmount
+  );
+
+  const { taskId } = await signAndDeployAutomationAccount(
+    consoleKit,
+    provider,
+    wallet,
+    ownerEoaAddress,
+    OwnerEoaPK,
+    chainId,
+    precomputeData,
+    ExecutorRegistryId,
+    AutomationSubscriptionParams.inputToken,
+    AutomationSubscriptionParams.inputAmount,
+    AutomationSubscriptionParams.inputTokenPerIterationLimit,
+    AutomationSubscriptionParams.duration
+  );
+
+  const taskData = await pollDeploymentStatus(consoleKit, taskId);
+  console.log("[complete]", { taskData });
+})();
