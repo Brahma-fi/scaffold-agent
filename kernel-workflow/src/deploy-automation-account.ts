@@ -1,13 +1,12 @@
 import {
   ConsoleKit,
   PreComputedAddressData,
-  TaskStatusData
+  TaskStatusData,
+  Address
 } from "brahma-templates-sdk";
 import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi, fromHex } from "viem";
 import { poll } from "./utils";
-
-type Address = `0x${string}`;
 
 const OwnerEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
 const ExecutorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;

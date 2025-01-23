@@ -196,9 +196,9 @@ axios@^1.7.9:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-brahma-templates-sdk@1.0.74:
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.74.tgz#5b65fdb751e3e45605e3416b7ce41044022f4f31"
+brahma-templates-sdk@1.0.75:
+  version "1.0.75"
+  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.75.tgz#220b61e2774bfd3a5ee28e3fe6a0d07b85fe1887"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
     axios "^1.7.9"
