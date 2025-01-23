@@ -1,11 +1,10 @@
 {
-  "name": "agent-server",
+  "name": "kernel-workflow",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "agent": "ts-node src/test/local.ts",
-    "server": "ts-node src/server/index.ts"
+    "deploy-account": "ts-node src/deploy-automation-account.ts"
   },
   "keywords": [],
   "author": "",

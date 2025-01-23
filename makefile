@@ -8,3 +8,6 @@ run-agent:
 
 run-server:
 	cd agent-server && yarn server
+
+run-deploy-account:
+	cd kernel-workflow && yarn deploy-account
