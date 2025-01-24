@@ -19,7 +19,11 @@ const AutomationSubscriptionParams = {
   inputToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc
   inputAmount: BigInt(10000000), // 10 usdc
   inputTokenPerIterationLimit: BigInt(2000000), // 2 usdc,
-  duration: 86400 // 1 day
+  duration: 86400, // 1 day,
+  metadata: {
+    every: "60s", // configure to required automation interval
+    receiver: "0xAE75B29ADe678372D77A8B41225654138a7E6ff1" // configure to required receiver address
+  }
 };
 
 const setupPrecomputeBalances = async (
@@ -113,8 +117,7 @@ const signAndDeployAutomationAccount = async (
         tokenInputs: tokenInputs,
         tokenLimits: tokenLimits
       },
-      // TODO:
-      {}
+      AutomationSubscriptionParams.metadata
     );
   if (!accountGenerationData)
     throw new Error("automation account generation data fetch fail");
@@ -157,15 +160,19 @@ const signAndDeployAutomationAccount = async (
 
 const pollDeploymentStatus = async (
   _consoleKit: ConsoleKit,
-  _deploymentTaskId: string
+  _deploymentTaskId: string,
+  _chainId: number
 ) => {
   const isTaskComplete = (taskStatus: TaskStatusData) =>
-    taskStatus.status === "successful" ||
-    taskStatus.status === "cancelled" ||
-    taskStatus.status === "failed";
+    !(
+      taskStatus.status === "successful" ||
+      taskStatus.status === "cancelled" ||
+      taskStatus.status === "failed"
+    );
   const getTaskStatus = async () => {
-    const taskStatus =
-      _consoleKit.publicDeployer.fetchDeploymentStatus(_deploymentTaskId);
+    const taskStatus = await _consoleKit.publicDeployer.fetchDeploymentStatus(
+      _deploymentTaskId
+    );
     console.log({ taskStatus });
 
     return taskStatus;
@@ -176,6 +183,13 @@ const pollDeploymentStatus = async (
     isTaskComplete,
     5000
   );
+
+  if (taskStatus.outputTransactionHash)
+    await _consoleKit.vendorCaller.indexTransaction(
+      taskStatus.outputTransactionHash,
+      _chainId
+    );
+
   return taskStatus;
 };
 
@@ -215,6 +229,6 @@ const pollDeploymentStatus = async (
     AutomationSubscriptionParams.duration
   );
 
-  const taskData = await pollDeploymentStatus(consoleKit, taskId);
+  const taskData = await pollDeploymentStatus(consoleKit, taskId, chainId);
   console.log("[complete]", { taskData });
 })();
