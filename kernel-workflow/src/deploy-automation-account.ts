@@ -22,7 +22,8 @@ const AutomationSubscriptionParams = {
   duration: 86400, // 1 day,
   metadata: {
     every: "60s", // configure to required automation interval
-    receiver: "0xAE75B29ADe678372D77A8B41225654138a7E6ff1" // configure to required receiver address
+    receiver: "0xAE75B29ADe678372D77A8B41225654138a7E6ff1", // configure to required receiver address
+    transferAmount: "200000" // configure to required transfer amount per iteration
   }
 };
 
