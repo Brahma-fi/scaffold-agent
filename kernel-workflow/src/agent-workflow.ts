@@ -1,4 +1,10 @@
-import { Address, ConsoleKit, Task } from "brahma-templates-sdk";
+import {
+  Address,
+  ConsoleKit,
+  Task,
+  WorkflowExecutionStatus,
+  WorkflowStateResponse
+} from "brahma-templates-sdk";
 import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi } from "viem";
 import { poll } from "./utils";
@@ -18,6 +24,7 @@ let PollCount = 0;
 const pollTasksAndSubmit = async (
   _consoleKit: ConsoleKit,
   _provider: JsonRpcProvider,
+  _chainId: number,
   _wallet: Wallet,
   _registryId: string,
   _executor: Address,
@@ -38,9 +45,28 @@ const pollTasksAndSubmit = async (
         !taskParams.subscription?.metadata?.receiver ||
         !taskParams.subscription?.metadata?.transferAmount
       ) {
-        console.error("[inconsistent-task]", taskParams, "skipping...");
+        console.error(
+          "[skipping] inconsistent task params",
+          id,
+          "\n======================="
+        );
         continue;
       }
+
+      const usdcBalance = await usdcContract.balanceOf(
+        taskParams.subAccountAddress
+      );
+      if (
+        BigInt(usdcBalance) <
+        BigInt(taskParams.subscription.metadata.transferAmount)
+      ) {
+        console.log(
+          `[skipping] insufficient balance/automation already completed for ${taskParams.subAccountAddress}`,
+          "\n======================="
+        );
+        continue;
+      }
+
       console.log("[executing] id:", id);
 
       const transferCalldata = usdcContract.interface.encodeFunctionData(
@@ -52,11 +78,10 @@ const pollTasksAndSubmit = async (
       );
       console.log("[transfer-calldata]", { transferCalldata });
 
-      const executorNonce = await _consoleKit.vendorCaller.getExecutorNonce(
-        _provider,
+      const executorNonce = await _consoleKit.vendorCaller.fetchExecutorNonce(
         taskParams.subAccountAddress,
         _executor,
-        _executorPlugin
+        _chainId
       );
 
       const { domain, message, types } =
@@ -96,12 +121,38 @@ const pollTasksAndSubmit = async (
         },
         registryId: _registryId
       });
-      console.log("[complete] id:", id);
+
+      const getWorkflowState = async () => {
+        const workflowState = await _consoleKit.vendorCaller.fetchWorkflowState(
+          id
+        );
+        if (!workflowState) {
+          console.error("[error] fetching working state fail");
+          return;
+        }
+
+        console.log("[workflow-status]", id, workflowState.status);
+        return workflowState;
+      };
+      const isWorkflowComplete = (workflowState: WorkflowStateResponse) =>
+        workflowState?.status === WorkflowExecutionStatus.RUNNING;
+
+      const workflowState = await poll<WorkflowStateResponse>(
+        getWorkflowState,
+        isWorkflowComplete,
+        5000
+      );
+
+      console.log(
+        "[complete] workflow state:",
+        workflowState.out,
+        "\n======================="
+      );
     }
   } catch (e) {
     console.log("an error occurred", e);
   }
-  console.log("[polling] cycle:", ++PollCount);
+  console.log("[polling] cycle:", ++PollCount, "\n=======================");
   return true;
 };
 
@@ -112,11 +163,14 @@ const pollTasksAndSubmit = async (
   const wallet = new ethers.Wallet(ExecutorEoaPK, provider);
 
   const executorAddress = ethers.computeAddress(ExecutorEoaPK) as Address;
+  const { chainId: chainIdBig } = await provider.getNetwork();
+  const chainId = parseInt(chainIdBig.toString(), 10);
 
   const pollForever = async () =>
     await pollTasksAndSubmit(
       consoleKit,
       provider,
+      chainId,
       wallet,
       ExecutorRegistryId,
       executorAddress,
