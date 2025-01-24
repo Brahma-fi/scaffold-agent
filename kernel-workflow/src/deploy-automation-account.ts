@@ -17,9 +17,9 @@ const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
 /// configure according to required subscription
 const AutomationSubscriptionParams = {
   inputToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc
-  inputAmount: BigInt(10000000), // 10 usdc
+  inputAmount: BigInt(1000000), // 10 usdc
   inputTokenPerIterationLimit: BigInt(2000000), // 2 usdc,
-  duration: 86400, // 1 day,
+  duration: 0, // 1 day,
   metadata: {
     every: "60s", // configure to required automation interval
     receiver: "0xAE75B29ADe678372D77A8B41225654138a7E6ff1", // configure to required receiver address
@@ -54,10 +54,15 @@ const setupPrecomputeBalances = async (
       _wallet
     );
 
-    await inputTokenContract.transfer(
-      precomputedData.precomputedAddress,
-      totalDepositAmount
-    );
+    const tx = await _wallet.sendTransaction({
+      to: await inputTokenContract.getAddress(),
+      value: 0,
+      data: inputTokenContract.interface.encodeFunctionData("transfer", [
+        precomputedData.precomputedAddress,
+        totalDepositAmount
+      ])
+    });
+    await tx.wait(2);
   } catch (e) {
     console.log(e);
     throw new Error("precompute setup balance fail");
