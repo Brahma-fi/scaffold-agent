@@ -58,15 +58,20 @@ const registerExecutor = async (
   console.log("[executor-console-sig]", executorRegistrationSignature);
 
   try {
-    // todo: return registryId
-    await _consoleKit.vendorCaller.registerExecutorOnConsole(
-      executorRegistrationSignature,
-      _chainId,
-      _executorConfig,
-      _executorMetadata.name,
-      _executorMetadata.logo,
-      _executorMetadata.metadata
-    );
+    const executorData =
+      await _consoleKit.vendorCaller.registerExecutorOnConsole(
+        executorRegistrationSignature,
+        _chainId,
+        _executorConfig,
+        _executorMetadata.name,
+        _executorMetadata.logo,
+        _executorMetadata.metadata
+      );
+
+    if (!executorData) throw new Error("register executor on console fail");
+
+    console.log("[executor-reg]", { executorData });
+    return executorData;
   } catch (e) {
     console.log(e);
     throw new Error("register executor on console fail");
@@ -116,16 +121,13 @@ const registerExecutorOnKernel = async (
   const { chainId: chainIdBig } = await provider.getNetwork();
   const chainId = parseInt(chainIdBig.toString(), 10);
 
-  // todo: get registryId from here
-  await registerExecutor(
+  const { id: registryId } = await registerExecutor(
     consoleKit,
     chainId,
     wallet,
     ExecutorConfigConsole,
     ExecutorMetadata
   );
-  // temp:
-  const registryId = "";
 
   const registeredExecutorData = await registerExecutorOnKernel(
     consoleKit,
