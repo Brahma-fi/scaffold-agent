@@ -33,15 +33,15 @@ const pollTasksAndSubmit = async (
       id,
       payload: { params: taskParams }
     } of tasks) {
-      console.log("[executing] id:", id);
       if (
         !taskParams.subscription?.metadata?.every ||
         !taskParams.subscription?.metadata?.receiver ||
         !taskParams.subscription?.metadata?.transferAmount
       ) {
-        console.error("inconsistent task params:", taskParams, "skipping...");
+        console.error("[inconsistent-task]", taskParams, "skipping...");
         continue;
       }
+      console.log("[executing] id:", id);
 
       const transferCalldata = usdcContract.interface.encodeFunctionData(
         "transfer",
