@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "deploy-account": "ts-node src/deploy-automation-account.ts",
-    "register-executor": "ts-node src/register-executor.ts"
+    "register-executor": "ts-node src/register-executor.ts",
+    "agent-workflow": "ts-node src/agent-workflow.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^22.10.7",
-    "brahma-templates-sdk": "1.0.83",
+    "brahma-templates-sdk": "1.0.88",
     "ethers": "^6.13.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
