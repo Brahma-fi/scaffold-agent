@@ -17,7 +17,7 @@ const ExecutorClientID = process.env.EXECUTOR_CLIENT_ID!;
 const ExecutorConfigConsole: ConsoleExecutorConfig = {
   clientId: ExecutorClientID,
   executor: ethers.computeAddress(OwnerEoaPK),
-  feeReceiver: ethers.computeAddress(OwnerEoaPK) as Address,
+  feeReceiver: ethers.ZeroAddress as Address,
   hopAddresses: ["0xAE75B29ADe678372D77A8B41225654138a7E6ff1"], // addresses that tokens will be moved through during execution
   inputTokens: ["0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"], // base usdc
   limitPerExecution: true,
@@ -33,8 +33,8 @@ const ExecutorMetadata: ExecutorMetadata = {
 
 /// configure according to required executor config for kernel registration
 const ExecutorConfigKernel: KernelExecutorConfig = {
-  defaultEvery: "30s",
-  executionTTL: "30s",
+  defaultEvery: "120s",
+  executionTTL: "120s",
   type: "INTERVAL"
 };
 
