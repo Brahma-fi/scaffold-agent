@@ -30,6 +30,8 @@ export const initializeAgent = async () => {
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", loadSystemPrompt()],
     new MessagesPlaceholder("chat_history"),
+    ["human", "{input}"],
+    new MessagesPlaceholder("agent_scratchpad"),
   ]);
 
   const agent = await createOpenAIFunctionsAgent({
