@@ -4,10 +4,19 @@ import {
 } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
-
+import { readFileSync } from "fs";
+import { join } from "path";
 import { tools } from "../tools";
 
 let agentExecutorInstance: AgentExecutor | null = null;
+
+function loadSystemPrompt(): string {
+  // Read the markdown file
+  const promptPath = join(__dirname, "prompt.md");
+  const content = readFileSync(promptPath, "utf-8");
+
+  return content;
+}
 
 export const initializeAgent = async () => {
   if (agentExecutorInstance) {
@@ -19,10 +28,8 @@ export const initializeAgent = async () => {
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
-    ["system", "You are a helpful assistant."],
+    ["system", loadSystemPrompt()],
     new MessagesPlaceholder("chat_history"),
-    ["human", "{input}"],
-    new MessagesPlaceholder("agent_scratchpad"),
   ]);
 
   const agent = await createOpenAIFunctionsAgent({

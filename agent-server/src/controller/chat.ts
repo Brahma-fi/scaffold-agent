@@ -25,6 +25,7 @@ export const chatWithAgent = async (
       return res
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "invalid userId" });
+        
     if (typeof messageReq !== "string")
       return res
         .status(httpStatus.BAD_REQUEST)
