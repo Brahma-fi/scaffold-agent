@@ -3,14 +3,16 @@ import { Request, Response } from "express";
 import { ChatRequestBody } from "../entity";
 import httpStatus from "http-status";
 import { initializeAgent } from "../agent";
-import { AgentExecutor } from "langchain/agents";
 
+// Only store chat histories, not agent instances
 const chatHistory: {
   [x: number]: {
-    agent: AgentExecutor;
     history: Array<HumanMessage | AIMessage>;
   };
 } = {};
+
+// Initialize the agent once
+let globalAgent: Awaited<ReturnType<typeof initializeAgent>>["agentExecutor"];
 
 export const chatWithAgent = async (
   req: Request<{}, {}, ChatRequestBody>,
@@ -28,17 +30,22 @@ export const chatWithAgent = async (
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "invalid messageReq" });
 
-    if (!chatHistory[userId]) {
+    // Initialize global agent if not exists
+    if (!globalAgent) {
       const { agentExecutor } = await initializeAgent();
+      globalAgent = agentExecutor;
+    }
+
+    // Initialize chat history for new users
+    if (!chatHistory[userId]) {
       chatHistory[userId] = {
-        agent: agentExecutor,
-        history: []
+        history: [],
       };
     }
 
-    const response = await chatHistory[userId].agent.invoke({
+    const response = await globalAgent.invoke({
       input: messageReq,
-      chat_history: chatHistory[userId].history
+      chat_history: chatHistory[userId].history,
     });
     console.log("Agent res: ", response.output);
 
@@ -47,7 +54,7 @@ export const chatWithAgent = async (
     console.log("User chat history:", userId, chatHistory);
 
     return res.status(httpStatus.OK).json({
-      data: { agentResponse: response.output, userId }
+      data: { agentResponse: response.output, userId },
     });
   } catch (e) {
     console.log(e);
