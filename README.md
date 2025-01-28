@@ -81,7 +81,7 @@ curl -N --connect-timeout 10 \
    make run-deploy-account
    ```
 3. To run your automation workflow -
-   - Modify `pollTasksAndSubmit()` with your automation logic. Console Kit SDK comes pre-built with native actions & helpers to make this easier
+   - Modify `pollTasksAndSubmit()` on [agent-workflow.ts](kernel-workflow/src/agent-workflow.ts) with your automation logic. Console Kit SDK comes pre-built with native actions & helpers to make this easier
    - Run from root dir:
    ```
    make run-agent-workflow
