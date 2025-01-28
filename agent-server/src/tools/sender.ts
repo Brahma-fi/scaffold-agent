@@ -24,7 +24,7 @@ const senderTool = tool(
       ConsoleKitConfig.baseUrl
     );
     try {
-      const { data } = await consoleKit.vendorCaller.send(
+      const { data } = await consoleKit.coreActions.send(
         chainId,
         accountAddress as Address,
         {

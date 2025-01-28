@@ -18,7 +18,7 @@ const bridgeStatusTool = tool(
     );
 
     try {
-      const bridgingStatus = await consoleKit.vendorCaller.fetchBridgingStatus(
+      const bridgingStatus = await consoleKit.coreActions.fetchBridgingStatus(
         txnHash as `0x${string}`,
         pid,
         chainIdIn,

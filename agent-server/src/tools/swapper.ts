@@ -29,7 +29,7 @@ const swapperTool = tool(
 
     try {
       const { data: swapRouteData } =
-        await consoleKit.vendorCaller.getSwapRoutes(
+        await consoleKit.coreActions.getSwapRoutes(
           tokenIn as Address,
           tokenOut as Address,
           accountAddress,
@@ -39,7 +39,7 @@ const swapperTool = tool(
         );
       const [swapRoute] = swapRouteData;
 
-      const { data } = await consoleKit.vendorCaller.swap(
+      const { data } = await consoleKit.coreActions.swap(
         chainId,
         accountAddress,
         {
