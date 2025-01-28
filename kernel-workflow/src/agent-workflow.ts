@@ -8,6 +8,7 @@ import {
 import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi } from "viem";
 import { poll } from "./utils";
+import { encodeMulti } from "ethers-multisend";
 
 const ExecutorEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
 const ExecutorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;
@@ -17,6 +18,7 @@ const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
 
 const BASE_USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 const EXECUTOR_PLUGIN = "0xb92929d03768a4F8D69552e15a8071EAf8E684ed";
+const MULTI_SEND_ADDRESS = "0x40A2aCCbd92BCA938b02010E17A5b8929b49130D"; // this is the only supported multisend contract (https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/multi_send_call_only.json)
 const POLLING_WAIT_INTERVAL = 10000;
 
 let PollCount = 0;
@@ -29,7 +31,8 @@ const pollTasksAndSubmit = async (
   _registryId: string,
   _executor: Address,
   _usdc: Address,
-  _executorPlugin: Address
+  _executorPlugin: Address,
+  _multiSend: Address
 ) => {
   try {
     const tasks = await _consoleKit.vendorCaller.fetchTasks(_registryId, 0, 10); // add pagination if required
@@ -69,14 +72,23 @@ const pollTasksAndSubmit = async (
 
       console.log("[executing] id:", id);
 
-      const transferCalldata = usdcContract.interface.encodeFunctionData(
-        "transfer",
-        [
-          taskParams.subscription.metadata.receiver,
-          taskParams.subscription.metadata.transferAmount
-        ]
+      const {
+        data: { transactions }
+      } = await _consoleKit.vendorCaller.send(
+        _chainId,
+        taskParams.subAccountAddress,
+        {
+          amount: taskParams.subscription.metadata.transferAmount,
+          to: taskParams.subscription.metadata.receiver,
+          tokenAddress: (await usdcContract.getAddress()) as Address
+        }
       );
-      console.log("[transfer-calldata]", { transferCalldata });
+      let transferTx = encodeMulti(transactions, _multiSend);
+      transferTx = {
+        ...transferTx,
+        value: BigInt(transferTx.value).toString()
+      };
+      console.log("[transfer-txn]", { transferTx });
 
       const executorNonce = await _consoleKit.vendorCaller.fetchExecutorNonce(
         taskParams.subAccountAddress,
@@ -88,13 +100,13 @@ const pollTasksAndSubmit = async (
         await _consoleKit.vendorCaller.generateExecutableDigest712Message({
           account: taskParams.subAccountAddress,
           chainId: taskParams.chainID,
-          data: transferCalldata,
+          data: transferTx.data,
           executor: _executor,
           nonce: executorNonce,
-          operation: 0,
+          operation: transferTx.operation!,
           pluginAddress: _executorPlugin,
-          to: _usdc,
-          value: "0"
+          to: transferTx.to as Address,
+          value: transferTx.value
         });
       const executionDigestSignature = await _wallet.signTypedData(
         domain,
@@ -107,10 +119,10 @@ const pollTasksAndSubmit = async (
         payload: {
           task: {
             executable: {
-              callType: 0,
-              data: transferCalldata,
-              to: _usdc,
-              value: "0"
+              callType: transferTx.operation!,
+              data: transferTx.data,
+              to: transferTx.to,
+              value: transferTx.value
             },
             executorSignature: executionDigestSignature,
             executor: _executor,
@@ -175,7 +187,8 @@ const pollTasksAndSubmit = async (
       ExecutorRegistryId,
       executorAddress,
       BASE_USDC,
-      EXECUTOR_PLUGIN
+      EXECUTOR_PLUGIN,
+      MULTI_SEND_ADDRESS
     );
   await poll(pollForever, (res: true) => res === true, POLLING_WAIT_INTERVAL);
 })();
