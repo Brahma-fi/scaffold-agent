@@ -191,7 +191,7 @@ const pollDeploymentStatus = async (
   );
 
   if (taskStatus.outputTransactionHash)
-    await _consoleKit.vendorCaller.indexTransaction(
+    await _consoleKit.coreActions.indexTransaction(
       taskStatus.outputTransactionHash,
       _chainId
     );

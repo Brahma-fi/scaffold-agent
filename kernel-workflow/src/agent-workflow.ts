@@ -1,7 +1,6 @@
 import {
   Address,
   ConsoleKit,
-  Task,
   WorkflowExecutionStatus,
   WorkflowStateResponse
 } from "brahma-templates-sdk";
@@ -35,7 +34,11 @@ const pollTasksAndSubmit = async (
   _multiSend: Address
 ) => {
   try {
-    const tasks = await _consoleKit.vendorCaller.fetchTasks(_registryId, 0, 10); // add pagination if required
+    const tasks = await _consoleKit.automationContext.fetchTasks(
+      _registryId,
+      0,
+      10
+    ); // add pagination if required
 
     const usdcContract = new ethers.Contract(_usdc, erc20Abi, _provider);
 
@@ -74,7 +77,7 @@ const pollTasksAndSubmit = async (
 
       const {
         data: { transactions }
-      } = await _consoleKit.vendorCaller.send(
+      } = await _consoleKit.coreActions.send(
         _chainId,
         taskParams.subAccountAddress,
         {
@@ -90,14 +93,15 @@ const pollTasksAndSubmit = async (
       };
       console.log("[transfer-txn]", { transferTx });
 
-      const executorNonce = await _consoleKit.vendorCaller.fetchExecutorNonce(
-        taskParams.subAccountAddress,
-        _executor,
-        _chainId
-      );
+      const executorNonce =
+        await _consoleKit.automationContext.fetchExecutorNonce(
+          taskParams.subAccountAddress,
+          _executor,
+          _chainId
+        );
 
       const { domain, message, types } =
-        await _consoleKit.vendorCaller.generateExecutableDigest712Message({
+        await _consoleKit.automationContext.generateExecutableDigest712Message({
           account: taskParams.subAccountAddress,
           chainId: taskParams.chainID,
           data: transferTx.data,
@@ -114,7 +118,7 @@ const pollTasksAndSubmit = async (
         message
       );
 
-      await _consoleKit.vendorCaller.submitTask({
+      await _consoleKit.automationContext.submitTask({
         id,
         payload: {
           task: {
@@ -135,9 +139,8 @@ const pollTasksAndSubmit = async (
       });
 
       const getWorkflowState = async () => {
-        const workflowState = await _consoleKit.vendorCaller.fetchWorkflowState(
-          id
-        );
+        const workflowState =
+          await _consoleKit.automationContext.fetchWorkflowState(id);
         if (!workflowState) {
           console.error("[error] fetching working state fail");
           return;
