@@ -3,7 +3,7 @@ import {
   ConsoleExecutorConfig,
   ConsoleKit,
   KernelExecutorConfig
-} from "brahma-templates-sdk";
+} from "brahma-console-kit";
 import { ethers, Wallet } from "ethers";
 import { ExecutorMetadata } from "./entity";
 
@@ -46,7 +46,7 @@ const registerExecutor = async (
   _executorMetadata: ExecutorMetadata
 ) => {
   const { domain, message, types } =
-    await _consoleKit.vendorCaller.generateConsoleExecutorRegistration712Message(
+    await _consoleKit.automationContext.generateConsoleExecutorRegistration712Message(
       _chainId,
       _executorConfig
     );
@@ -59,7 +59,7 @@ const registerExecutor = async (
 
   try {
     const executorData =
-      await _consoleKit.vendorCaller.registerExecutorOnConsole(
+      await _consoleKit.automationContext.registerExecutorOnConsole(
         executorRegistrationSignature,
         _chainId,
         _executorConfig,
@@ -86,7 +86,7 @@ const registerExecutorOnKernel = async (
   _executorConfig: KernelExecutorConfig
 ) => {
   const { domain, message, types } =
-    await _consoleKit.vendorCaller.generateKernelExecutorRegistration712Message(
+    await _consoleKit.automationContext.generateKernelExecutorRegistration712Message(
       _chainId,
       _registryId,
       _executorConfig
@@ -99,7 +99,7 @@ const registerExecutorOnKernel = async (
   console.log("[executor-kernel-sig]", executorRegistrationSignature);
 
   try {
-    await _consoleKit.vendorCaller.registerExecutorOnKernel(
+    await _consoleKit.automationContext.registerExecutorOnKernel(
       _registryId,
       executorRegistrationSignature,
       _executorConfig
@@ -109,7 +109,7 @@ const registerExecutorOnKernel = async (
     throw new Error("register executor on kernel fail");
   }
 
-  return await _consoleKit.vendorCaller.fetchExecutorDetails(_registryId);
+  return await _consoleKit.automationContext.fetchExecutorDetails(_registryId);
 };
 
 (async () => {

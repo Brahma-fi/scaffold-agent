@@ -3,7 +3,7 @@ import {
   PreComputedAddressData,
   TaskStatusData,
   Address
-} from "brahma-templates-sdk";
+} from "brahma-console-kit";
 import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi, fromHex } from "viem";
 import { poll } from "./utils";
@@ -191,7 +191,7 @@ const pollDeploymentStatus = async (
   );
 
   if (taskStatus.outputTransactionHash)
-    await _consoleKit.vendorCaller.indexTransaction(
+    await _consoleKit.coreActions.indexTransaction(
       taskStatus.outputTransactionHash,
       _chainId
     );
