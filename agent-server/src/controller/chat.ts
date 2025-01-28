@@ -5,15 +5,9 @@ import httpStatus from "http-status";
 import { initializeAgent } from "../agent";
 import { StreamingCallbackHandler } from "./callbacks";
 
-// Only store chat histories, not agent instances
 const chatHistory: {
-  [x: number]: {
-    history: Array<HumanMessage | AIMessage>;
-  };
+  [x: number]: Array<HumanMessage | AIMessage>;
 } = {};
-
-// Initialize the agent once
-let globalAgent: Awaited<ReturnType<typeof initializeAgent>>["agentExecutor"];
 
 export const chatWithAgent = async (
   req: Request<{}, {}, ChatRequestBody>,
@@ -27,55 +21,47 @@ export const chatWithAgent = async (
       return res
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "invalid userId" });
-        
+
     if (typeof messageReq !== "string")
       return res
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "invalid messageReq" });
 
-    // Set SSE headers
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
-
-    // Initialize global agent if not exists
-    if (!globalAgent) {
-      const { agentExecutor } = await initializeAgent();
-      globalAgent = agentExecutor;
-    }
+    // Get global agent
+    const { agentExecutor } = await initializeAgent();
 
     // Initialize chat history for new users
     if (!chatHistory[userId]) {
-      chatHistory[userId] = {
-        history: [],
-      };
+      chatHistory[userId] = [];
     }
-
-    let responseText = "";
 
     // Create streaming callbacks
     const callbacks = [new StreamingCallbackHandler(res)];
 
     // Invoke agent with streaming
-    const response = await globalAgent.invoke(
+    const response = await agentExecutor.invoke(
       {
         input: messageReq,
-        chat_history: chatHistory[userId].history,
+        chat_history: chatHistory[userId]
       },
       { callbacks }
     );
 
     // Update chat history with complete response
-    chatHistory[userId].history.push(new HumanMessage(messageReq));
-    chatHistory[userId].history.push(new AIMessage(response.output));
-    console.log("User chat history:", userId, chatHistory);
+    chatHistory[userId].push(new HumanMessage(messageReq));
+    chatHistory[userId].push(new AIMessage(response.output));
+    console.log("User chat history:", userId, chatHistory[userId]);
 
-    // Send end message
-    res.write(`data: [DONE]\n\n`);
-    res.end();
+    return res.status(httpStatus.OK).json({
+      data: {
+        agentResponse: response.output,
+        userId
+      }
+    });
   } catch (e) {
     console.error(e);
-    res.write(`data: ${JSON.stringify({ error: "An error occurred" })}\n\n`);
-    res.end();
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      error: "An error occurred"
+    });
   }
 };
