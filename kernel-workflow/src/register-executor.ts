@@ -3,7 +3,7 @@ import {
   ConsoleExecutorConfig,
   ConsoleKit,
   KernelExecutorConfig
-} from "brahma-templates-sdk";
+} from "brahma-console-kit";
 import { ethers, Wallet } from "ethers";
 import { ExecutorMetadata } from "./entity";
 

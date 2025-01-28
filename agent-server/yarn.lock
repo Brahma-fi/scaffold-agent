@@ -354,9 +354,9 @@ braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-brahma-templates-sdk@^1.0.98:
-  version "1.0.98"
-  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.98.tgz#33f03f6511f884096d879ebe716247f0c95c1e7b"
+brahma-console-kit@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.4.tgz#ec918f24e177394356597085d4900092c538ae7d"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
     axios "^1.7.9"
@@ -1372,8 +1372,8 @@ vary@^1, vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
 
 viem@^2.21.3:
-  version "2.22.15"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.22.15.tgz#a217834f4c7c44c49abc67fee62bf11e9d1a566c"
+  version "2.22.16"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.22.16.tgz#f23e3a92284df3d05434d21fbf40b76b8f0b01b6"
   dependencies:
     "@noble/curves" "1.8.1"
     "@noble/hashes" "1.7.1"

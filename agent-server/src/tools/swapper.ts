@@ -1,5 +1,5 @@
 import { tool } from "@langchain/core/tools";
-import { Address, ConsoleKit } from "brahma-templates-sdk";
+import { Address, ConsoleKit } from "brahma-console-kit";
 import { z } from "zod";
 import { ConsoleKitConfig } from "../config";
 
