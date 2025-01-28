@@ -2,7 +2,7 @@
 
 A collection of example implementations showcasing how to build autonomous DeFi agents using Console Kit. This repository demonstrates integration patterns ranging from LLM-powered execution to automated DeFi workflows.
 
-![kernel-setup](./images/image.png)
+![kernel-setup](./images/overview.png)
 
 ## Purpose
 
