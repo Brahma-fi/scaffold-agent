@@ -354,9 +354,9 @@ braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-brahma-templates-sdk@^1.0.97:
-  version "1.0.97"
-  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.97.tgz#f85c9bd274a17fb552305f7ea32bf311ea8248b2"
+brahma-templates-sdk@^1.0.98:
+  version "1.0.98"
+  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.98.tgz#33f03f6511f884096d879ebe716247f0c95c1e7b"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
     axios "^1.7.9"

@@ -372,9 +372,9 @@ bn.js@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.1.tgz#0bc527a6a0d18d0aa8d5b0538ce4a77dccfa7b70"
 
-brahma-templates-sdk@1.0.92:
-  version "1.0.92"
-  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.92.tgz#09ed26d9a8c90ad09528e60828d7365455302dbe"
+brahma-templates-sdk@1.0.98:
+  version "1.0.98"
+  resolved "https://registry.yarnpkg.com/brahma-templates-sdk/-/brahma-templates-sdk-1.0.98.tgz#33f03f6511f884096d879ebe716247f0c95c1e7b"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
     axios "^1.7.9"
