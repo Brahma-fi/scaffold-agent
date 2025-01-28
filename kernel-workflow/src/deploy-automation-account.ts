@@ -19,7 +19,7 @@ const AutomationSubscriptionParams = {
   inputToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc
   inputAmount: BigInt(1000000), // 10 usdc
   inputTokenPerIterationLimit: BigInt(2000000), // 2 usdc,
-  duration: 0, // 1 day,
+  duration: 0,
   metadata: {
     every: "60s", // configure to required automation interval
     receiver: "0xAE75B29ADe678372D77A8B41225654138a7E6ff1", // configure to required receiver address
