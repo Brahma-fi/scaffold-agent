@@ -16,7 +16,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.7",
-    "brahma-templates-sdk": "^1.0.92",
+    "brahma-templates-sdk": "^1.0.97",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "express": "^4.21.2",
