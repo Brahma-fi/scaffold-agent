@@ -14,7 +14,7 @@ export const chatWithAgent = async (
   res: Response
 ): Promise<any> => {
   const { userId, messageReq } = req.body;
-
+  res.setHeader("Content-Type", "text/event-stream");
   try {
     // Input validation
     if (typeof userId !== "number")
@@ -42,7 +42,7 @@ export const chatWithAgent = async (
     const response = await agentExecutor.invoke(
       {
         input: messageReq,
-        chat_history: chatHistory[userId]
+        chat_history: chatHistory[userId],
       },
       { callbacks }
     );
@@ -52,16 +52,12 @@ export const chatWithAgent = async (
     chatHistory[userId].push(new AIMessage(response.output));
     console.log("User chat history:", userId, chatHistory[userId]);
 
-    return res.status(httpStatus.OK).json({
-      data: {
-        agentResponse: response.output,
-        userId
-      }
-    });
+    // Send end message
+    return res.status(httpStatus.OK).end();
   } catch (e) {
     console.error(e);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      error: "An error occurred"
-    });
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .write(`data: ${JSON.stringify({ error: "An error occurred" })}\n\n`);
   }
 };
