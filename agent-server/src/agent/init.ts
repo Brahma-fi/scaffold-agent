@@ -25,6 +25,7 @@ export const initializeAgent = async () => {
 
   const llm = new ChatOpenAI({
     modelName: "gpt-4o-mini",
+    streaming: true,
   });
 
   const prompt = ChatPromptTemplate.fromMessages([

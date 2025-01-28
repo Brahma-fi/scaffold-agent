@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { ChatRequestBody } from "../entity";
 import httpStatus from "http-status";
 import { initializeAgent } from "../agent";
+import { StreamingCallbackHandler } from "./callbacks";
 
 // Only store chat histories, not agent instances
 const chatHistory: {
@@ -21,6 +22,7 @@ export const chatWithAgent = async (
   const { userId, messageReq } = req.body;
 
   try {
+    // Input validation
     if (typeof userId !== "number")
       return res
         .status(httpStatus.BAD_REQUEST)
@@ -30,6 +32,11 @@ export const chatWithAgent = async (
       return res
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "invalid messageReq" });
+
+    // Set SSE headers
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
 
     // Initialize global agent if not exists
     if (!globalAgent) {
@@ -44,23 +51,31 @@ export const chatWithAgent = async (
       };
     }
 
-    const response = await globalAgent.invoke({
-      input: messageReq,
-      chat_history: chatHistory[userId].history,
-    });
-    console.log("Agent res: ", response.output);
+    let responseText = "";
 
+    // Create streaming callbacks
+    const callbacks = [new StreamingCallbackHandler(res)];
+
+    // Invoke agent with streaming
+    const response = await globalAgent.invoke(
+      {
+        input: messageReq,
+        chat_history: chatHistory[userId].history,
+      },
+      { callbacks }
+    );
+
+    // Update chat history with complete response
     chatHistory[userId].history.push(new HumanMessage(messageReq));
     chatHistory[userId].history.push(new AIMessage(response.output));
     console.log("User chat history:", userId, chatHistory);
 
-    return res.status(httpStatus.OK).json({
-      data: { agentResponse: response.output, userId },
-    });
+    // Send end message
+    res.write(`data: [DONE]\n\n`);
+    res.end();
   } catch (e) {
-    console.log(e);
-    return res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ error: "an error occurred" });
+    console.error(e);
+    res.write(`data: ${JSON.stringify({ error: "An error occurred" })}\n\n`);
+    res.end();
   }
 };
