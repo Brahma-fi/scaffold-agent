@@ -36,12 +36,11 @@ const setupPrecomputeBalances = async (
   _inputToken: Address,
   _inputAmount: bigint
 ) => {
-  const precomputedData =
-    await _consoleKit.publicDeployer.fetchPreComputeAddress(
-      _userEoa,
-      _chainId,
-      _inputToken
-    );
+  const precomputedData = await _consoleKit.publicDeployer.fetchPreComputeData(
+    _userEoa,
+    _chainId,
+    _inputToken
+  );
   if (!precomputedData) throw new Error("precompute call fail");
 
   const totalDepositAmount = BigInt(precomputedData.feeEstimate) + _inputAmount;

@@ -372,9 +372,9 @@ bn.js@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.1.tgz#0bc527a6a0d18d0aa8d5b0538ce4a77dccfa7b70"
 
-brahma-console-kit@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.4.tgz#ec918f24e177394356597085d4900092c538ae7d"
+brahma-console-kit@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.5.tgz#e3d694f514af71f540cfce4b2f288996f131ef8a"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
     axios "^1.7.9"
