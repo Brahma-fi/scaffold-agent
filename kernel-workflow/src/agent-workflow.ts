@@ -9,7 +9,7 @@ import { erc20Abi } from "viem";
 import { poll } from "./utils";
 import { encodeMulti } from "ethers-multisend";
 
-const ExecutorEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
+const ExecutorEoaPK = process.env.EXECUTOR_EOA_PRIVATE_KEY!;
 const ExecutorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;
 const JsonRpcUrl = process.env.JSON_RPC_URL!;
 const ConsoleApiKey = process.env.CONSOLE_API_KEY!;
@@ -26,7 +26,7 @@ const pollTasksAndSubmit = async (
   _consoleKit: ConsoleKit,
   _provider: JsonRpcProvider,
   _chainId: number,
-  _wallet: Wallet,
+  _executorWallet: Wallet,
   _registryId: string,
   _executor: Address,
   _usdc: Address,
@@ -112,7 +112,7 @@ const pollTasksAndSubmit = async (
           to: transferTx.to as Address,
           value: transferTx.value
         });
-      const executionDigestSignature = await _wallet.signTypedData(
+      const executionDigestSignature = await _executorWallet.signTypedData(
         domain,
         types,
         message
@@ -175,7 +175,7 @@ const pollTasksAndSubmit = async (
   const consoleKit = new ConsoleKit(ConsoleApiKey, ConsoleBaseUrl);
 
   const provider = new ethers.JsonRpcProvider(JsonRpcUrl);
-  const wallet = new ethers.Wallet(ExecutorEoaPK, provider);
+  const executorWallet = new ethers.Wallet(ExecutorEoaPK, provider);
 
   const executorAddress = ethers.computeAddress(ExecutorEoaPK) as Address;
   const { chainId: chainIdBig } = await provider.getNetwork();
@@ -186,7 +186,7 @@ const pollTasksAndSubmit = async (
       consoleKit,
       provider,
       chainId,
-      wallet,
+      executorWallet,
       ExecutorRegistryId,
       executorAddress,
       BASE_USDC,

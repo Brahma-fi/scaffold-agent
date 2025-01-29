@@ -7,7 +7,7 @@ import {
 import { ethers, Wallet } from "ethers";
 import { ExecutorMetadata } from "./entity";
 
-const OwnerEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
+const ExecutorEoaPK = process.env.EXECUTOR_EOA_PRIVATE_KEY!;
 const JsonRpcUrl = process.env.JSON_RPC_URL!;
 const ConsoleApiKey = process.env.CONSOLE_API_KEY!;
 const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
@@ -16,7 +16,7 @@ const ExecutorClientID = process.env.EXECUTOR_CLIENT_ID!;
 /// configure according to required executor config for console registration
 const ExecutorConfigConsole: ConsoleExecutorConfig = {
   clientId: ExecutorClientID,
-  executor: ethers.computeAddress(OwnerEoaPK),
+  executor: ethers.computeAddress(ExecutorEoaPK),
   feeReceiver: ethers.ZeroAddress as Address,
   hopAddresses: ["0xAE75B29ADe678372D77A8B41225654138a7E6ff1"], // addresses that tokens will be moved through during execution
   inputTokens: ["0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"], // base usdc
@@ -41,7 +41,7 @@ const ExecutorConfigKernel: KernelExecutorConfig = {
 const registerExecutor = async (
   _consoleKit: ConsoleKit,
   _chainId: number,
-  _wallet: Wallet,
+  _executorWallet: Wallet,
   _executorConfig: ConsoleExecutorConfig,
   _executorMetadata: ExecutorMetadata
 ) => {
@@ -50,7 +50,7 @@ const registerExecutor = async (
       _chainId,
       _executorConfig
     );
-  const executorRegistrationSignature = await _wallet.signTypedData(
+  const executorRegistrationSignature = await _executorWallet.signTypedData(
     domain,
     types,
     message
@@ -81,7 +81,7 @@ const registerExecutor = async (
 const registerExecutorOnKernel = async (
   _consoleKit: ConsoleKit,
   _chainId: number,
-  _wallet: Wallet,
+  _executorWallet: Wallet,
   _registryId: string,
   _executorConfig: KernelExecutorConfig
 ) => {
@@ -91,7 +91,7 @@ const registerExecutorOnKernel = async (
       _registryId,
       _executorConfig
     );
-  const executorRegistrationSignature = await _wallet.signTypedData(
+  const executorRegistrationSignature = await _executorWallet.signTypedData(
     domain,
     types,
     message
@@ -116,7 +116,7 @@ const registerExecutorOnKernel = async (
   const consoleKit = new ConsoleKit(ConsoleApiKey, ConsoleBaseUrl);
 
   const provider = new ethers.JsonRpcProvider(JsonRpcUrl);
-  const wallet = new ethers.Wallet(OwnerEoaPK, provider);
+  const executorWallet = new ethers.Wallet(ExecutorEoaPK, provider);
 
   const { chainId: chainIdBig } = await provider.getNetwork();
   const chainId = parseInt(chainIdBig.toString(), 10);
@@ -124,7 +124,7 @@ const registerExecutorOnKernel = async (
   const { id: registryId } = await registerExecutor(
     consoleKit,
     chainId,
-    wallet,
+    executorWallet,
     ExecutorConfigConsole,
     ExecutorMetadata
   );
@@ -132,7 +132,7 @@ const registerExecutorOnKernel = async (
   const registeredExecutorData = await registerExecutorOnKernel(
     consoleKit,
     chainId,
-    wallet,
+    executorWallet,
     registryId,
     ExecutorConfigKernel
   );

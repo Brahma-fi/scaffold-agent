@@ -8,7 +8,7 @@ import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi, fromHex } from "viem";
 import { poll } from "./utils";
 
-const OwnerEoaPK = process.env.OWNER_EOA_PRIVATE_KEY!;
+const UserEoaPK = process.env.USER_EOA_PRIVATE_KEY!; /// This user must have enough tokens to fund deployments & automation subscription deposits
 const ExecutorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;
 const JsonRpcUrl = process.env.JSON_RPC_URL!;
 const ConsoleApiKey = process.env.CONSOLE_API_KEY!;
@@ -30,16 +30,15 @@ const AutomationSubscriptionParams = {
 const setupPrecomputeBalances = async (
   _consoleKit: ConsoleKit,
   _provider: JsonRpcProvider,
-  _wallet: Wallet,
-  _ownerEoa: Address,
-  _ownerEoaPK: string,
+  _userWallet: Wallet,
+  _userEoa: Address,
   _chainId: number,
   _inputToken: Address,
   _inputAmount: bigint
 ) => {
   const precomputedData =
     await _consoleKit.publicDeployer.fetchPreComputeAddress(
-      _ownerEoa,
+      _userEoa,
       _chainId,
       _inputToken
     );
@@ -51,10 +50,10 @@ const setupPrecomputeBalances = async (
     const inputTokenContract = new ethers.Contract(
       _inputToken,
       erc20Abi,
-      _wallet
+      _userWallet
     );
 
-    const tx = await _wallet.sendTransaction({
+    const tx = await _userWallet.sendTransaction({
       to: await inputTokenContract.getAddress(),
       value: 0,
       data: inputTokenContract.interface.encodeFunctionData("transfer", [
@@ -75,9 +74,8 @@ const setupPrecomputeBalances = async (
 const signAndDeployAutomationAccount = async (
   _consoleKit: ConsoleKit,
   _provider: JsonRpcProvider,
-  _wallet: Wallet,
-  _ownerEoa: Address,
-  _ownerEoaPK: string,
+  _userWallet: Wallet,
+  _userEoa: Address,
   _chainId: number,
   _precomputeData: PreComputedAddressData,
   _executorRegistryId: string,
@@ -89,7 +87,7 @@ const signAndDeployAutomationAccount = async (
   const inputTokenContract = new ethers.Contract(
     _inputToken,
     erc20Abi,
-    _wallet
+    _userWallet
   );
   const inputTokenDecimals = await inputTokenContract.decimals();
 
@@ -110,7 +108,7 @@ const signAndDeployAutomationAccount = async (
 
   const accountGenerationData =
     await _consoleKit.publicDeployer.generateAutomationSubAccount(
-      _ownerEoa,
+      _userEoa,
       _precomputeData.precomputedAddress,
       _chainId,
       _executorRegistryId,
@@ -134,7 +132,7 @@ const signAndDeployAutomationAccount = async (
     subscriptionDraftID
   } = accountGenerationData;
 
-  const deploymentSignature = await _wallet.signTypedData(
+  const deploymentSignature = await _userWallet.signTypedData(
     {
       verifyingContract: domain.verifyingContract,
       chainId: fromHex(domain.chainId as Address, "number")
@@ -145,7 +143,7 @@ const signAndDeployAutomationAccount = async (
   console.log("[dep-signature]", deploymentSignature);
 
   const deployData = await _consoleKit.publicDeployer.deployBrahmaAccount(
-    _ownerEoa,
+    _userEoa,
     _chainId,
     _executorRegistryId,
     subscriptionDraftID,
@@ -203,18 +201,17 @@ const pollDeploymentStatus = async (
   const consoleKit = new ConsoleKit(ConsoleApiKey, ConsoleBaseUrl);
 
   const provider = new ethers.JsonRpcProvider(JsonRpcUrl);
-  const wallet = new ethers.Wallet(OwnerEoaPK, provider);
+  const userWallet = new ethers.Wallet(UserEoaPK, provider);
 
-  const ownerEoaAddress = ethers.computeAddress(OwnerEoaPK) as Address;
+  const userEoaAddress = ethers.computeAddress(UserEoaPK) as Address;
   const { chainId: chainIdBig } = await provider.getNetwork();
   const chainId = parseInt(chainIdBig.toString(), 10);
 
   const precomputeData = await setupPrecomputeBalances(
     consoleKit,
     provider,
-    wallet,
-    ownerEoaAddress,
-    OwnerEoaPK,
+    userWallet,
+    userEoaAddress,
     chainId,
     AutomationSubscriptionParams.inputToken,
     AutomationSubscriptionParams.inputAmount
@@ -223,9 +220,8 @@ const pollDeploymentStatus = async (
   const { taskId } = await signAndDeployAutomationAccount(
     consoleKit,
     provider,
-    wallet,
-    ownerEoaAddress,
-    OwnerEoaPK,
+    userWallet,
+    userEoaAddress,
     chainId,
     precomputeData,
     ExecutorRegistryId,
