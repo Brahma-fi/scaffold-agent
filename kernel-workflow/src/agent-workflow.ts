@@ -16,8 +16,6 @@ const ConsoleApiKey = process.env.CONSOLE_API_KEY!;
 const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
 
 const BASE_USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-const EXECUTOR_PLUGIN = "0xb92929d03768a4F8D69552e15a8071EAf8E684ed";
-const MULTI_SEND_ADDRESS = "0x40A2aCCbd92BCA938b02010E17A5b8929b49130D"; // this is the only supported multisend contract (https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/multi_send_call_only.json)
 const POLLING_WAIT_INTERVAL = 10000;
 
 let PollCount = 0;
@@ -190,8 +188,8 @@ const pollTasksAndSubmit = async (
       ExecutorRegistryId,
       executorAddress,
       BASE_USDC,
-      EXECUTOR_PLUGIN,
-      MULTI_SEND_ADDRESS
+      consoleKit.getContractAddress("EXECUTOR_PLUGIN"),
+      consoleKit.getContractAddress("MULTI_SEND") // this is the only supported MultiSend contract (https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/multi_send_call_only.json)
     );
   await poll(pollForever, (res: true) => res === true, POLLING_WAIT_INTERVAL);
 })();
