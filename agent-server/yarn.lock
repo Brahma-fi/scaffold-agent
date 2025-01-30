@@ -354,9 +354,9 @@ braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-brahma-console-kit@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.5.tgz#e3d694f514af71f540cfce4b2f288996f131ef8a"
+brahma-console-kit@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.6.tgz#a28701bc40297a4c8e5e1d933f66b1c777e5e27d"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
     axios "^1.7.9"
