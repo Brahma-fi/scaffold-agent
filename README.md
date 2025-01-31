@@ -88,11 +88,6 @@ curl -N --connect-timeout 10 \
    ```
    This will poll for your executable tasks, and run your automation periodically
 
-## Additional Examples
-
-- [ConsoleKit OpenAI Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
-- [ConsoleKit Eliza Plugin](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
-
 ## References
 
 - [Console Kit Docs](https://github.com/Brahma-fi/console-kit/blob/ft-docs/docs/introduction.md)
