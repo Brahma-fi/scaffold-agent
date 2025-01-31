@@ -24,17 +24,17 @@ Example implementations of automated DeFi workflows using Console Kit's infrastr
 
 1. Install dependencies
 
-```
+```bash
 cd openai-agent && yarn
 ```
 
-```
+```bash
 cd kernel-workflow && yarn
 ```
 
 2. Set up environment variables and fill all values
 
-```
+```bash
 mv .env.example .env
 ```
 
@@ -42,26 +42,13 @@ mv .env.example .env
 
 ### OpenAI Agent
 
-1. Install dependencies:
+1. Run the local test agent:
 
 ```bash
-cd openai-agent
-yarn install
+make run-agent
 ```
 
-2. Set up environment variables:
-
-```bash
-export OPENAI_API_KEY="your-openai-api-key"
-export CONSOLE_KIT_API_KEY="your-console-kit-api-key"
-export CONSOLE_KIT_BASE_URL="your-console-kit-base-url"
-```
-
-3. Run the local test agent:
-
-```bash
-yarn agent
-```
+from root dir
 
 This will start an interactive session where you can chat with the agent. The agent can:
 

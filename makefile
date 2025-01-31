@@ -4,10 +4,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 run-agent:
-	cd agent-server && yarn agent
-
-run-server:
-	cd agent-server && yarn server
+	cd openai-agent && yarn agent
 
 run-deploy-account:
 	cd kernel-workflow && yarn deploy-account

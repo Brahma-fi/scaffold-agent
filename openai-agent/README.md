@@ -14,8 +14,8 @@ yarn install
 
 ```bash
 export OPENAI_API_KEY="your-openai-api-key"
-export CONSOLE_KIT_API_KEY="your-console-kit-api-key"
-export CONSOLE_KIT_BASE_URL="your-console-kit-base-url"
+export CONSOLE_API_KEY="your-console-kit-api-key"
+export CONSOLE_BASE_URL="your-console-kit-base-url"
 ```
 
 ## Usage
