@@ -42,23 +42,29 @@ mv .env.example .env
 
 ### Eliza Agent
 
-1. Run from root dir to spin up the LLM agent server
+1. Install the agent and its plugins:
 
+```bash
+cd eliza-agent
+yarn install
 ```
-make run-agent
+
+2. Build the plugins:
+
+```bash
+yarn build
 ```
 
-2. All the agent's tools can be found [here](eliza-agent/src/tools), and any new tools can be configured.
+3. All plugins can be found in the `packages` directory:
 
-3. To stream out responses from the agent
+   - Console Kit Plugin: `packages/plugin-console-kit`
+   - Additional plugins can be added to the `packages` directory
 
-```
-curl -N --connect-timeout 10 \
-  -H "Content-Type: application/json" \
-  -H "Accept: text/event-stream" \
-  -d '{"messageReq":<your-message>,
-"userId":<any-uuid>}' \
-  'http://localhost:<your-port>/v1/chat'
+4. To use the agent in your application, import and configure the plugins as needed:
+
+```typescript
+import { ConsoleKitPlugin } from "@eliza/plugin-console-kit";
+// Configure and use the plugin in your application
 ```
 
 ### Kernel Workflow
