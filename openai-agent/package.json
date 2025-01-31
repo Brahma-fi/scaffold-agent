@@ -1,0 +1,25 @@
+{
+    "name": "openai-agent",
+    "version": "1.0.0",
+    "description": "OpenAI-based agent implementation",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "agent": "ts-node src/test/local.ts"
+    },
+    "dependencies": {
+        "openai": "^4.28.0",
+        "brahma-console-kit": "^1.0.6",
+        "express": "^4.21.2",
+        "cors": "^2.8.5",
+        "http-status": "^2.1.0",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.10.7",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    }
+}
