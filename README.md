@@ -10,12 +10,6 @@ This scaffold serves as a starting point for developers looking to build autonom
 
 ## Overview
 
-The repository contains two core components:
-
-### Agent Server
-
-A LangChain-based implementation showing how to create LLM agents that can execute DeFi operations through Console Kit. The server integrates Console Kit's native tools (cross-chain bridges, swap routing, token transfers etc.) into a LangChain executor, enabling natural language driven DeFi automation.
-
 ### Kernel Workflow
 
 Example implementations of automated DeFi workflows using Console Kit's infrastructure. These examples demonstrate how to set up autonomous agents that can execute complex DeFi strategies while leveraging Console's policy engine and execution framework.
@@ -23,10 +17,6 @@ Example implementations of automated DeFi workflows using Console Kit's infrastr
 ## Local setup
 
 1. Install dependencies
-
-```bash
-cd agent-server && yarn
-```
 
 ```bash
 cd kernel-workflow && yarn
@@ -39,27 +29,6 @@ mv .env.example .env
 ```
 
 ## Running components
-
-### Agent Server
-
-1. Run from root dir to spin up the LLM agent server
-
-```bash
-make run-server
-```
-
-2. All the agent's tools can be found [here](agent-server/src/tools), and any new tools can be configured.
-
-3. To stream out responses from the server
-
-```bash
-curl -N --connect-timeout 10 \
-  -H "Content-Type: application/json" \
-  -H "Accept: text/event-stream" \
-  -d '{"messageReq":<your-message>,
-"userId":<any-uuid>}' \
-  'http://localhost:<your-port>/v1/chat'
-```
 
 ### Kernel Workflow
 
@@ -90,6 +59,7 @@ curl -N --connect-timeout 10 \
 
 ## Additional Examples
 
+- [ConsoleKit LangChain Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 - [ConsoleKit OpenAI Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
 - [ConsoleKit Eliza Plugin](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
 
