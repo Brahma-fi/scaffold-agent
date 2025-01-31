@@ -42,24 +42,44 @@ mv .env.example .env
 
 ### OpenAI Agent
 
-1. Run from root dir to spin up the LLM agent server
+1. Install dependencies:
+
+```bash
+cd openai-agent
+yarn install
+```
+
+2. Set up environment variables:
+
+```bash
+export OPENAI_API_KEY="your-openai-api-key"
+export CONSOLE_KIT_API_KEY="your-console-kit-api-key"
+export CONSOLE_KIT_BASE_URL="your-console-kit-base-url"
+```
+
+3. Run the local test agent:
+
+```bash
+yarn agent
+```
+
+This will start an interactive session where you can chat with the agent. The agent can:
+
+- Send tokens
+- Bridge tokens between chains
+- Check bridge status
+- Swap tokens
+
+Example commands:
 
 ```
-make run-agent
+> Send 100 USDC from 0x123... to 0x456... on chain 1
+> Bridge 100 USDC from Ethereum to Polygon
+> Check bridge status for transaction 0x789... with pid 1
+> Swap 100 USDC for ETH on Ethereum
 ```
 
-2. All the agent's tools can be found [here](openai-agent/src/tools), and any new tools can be configured.
-
-3. To stream out responses from the agent
-
-```
-curl -N --connect-timeout 10 \
-  -H "Content-Type: application/json" \
-  -H "Accept: text/event-stream" \
-  -d '{"messageReq":<your-message>,
-"userId":<any-uuid>}' \
-  'http://localhost:<your-port>/v1/chat'
-```
+Type 'exit' to quit the interactive session.
 
 ### Kernel Workflow
 
