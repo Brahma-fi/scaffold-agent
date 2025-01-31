@@ -24,17 +24,17 @@ Example implementations of automated DeFi workflows using Console Kit's infrastr
 
 1. Install dependencies
 
-```
+```bash
 cd agent-server && yarn
 ```
 
-```
+```bash
 cd kernel-workflow && yarn
 ```
 
 2. Set up environment variables and fill all values
 
-```
+```bash
 mv .env.example .env
 ```
 
@@ -44,7 +44,7 @@ mv .env.example .env
 
 1. Run from root dir to spin up the LLM agent server
 
-```
+```bash
 make run-server
 ```
 
@@ -52,7 +52,7 @@ make run-server
 
 3. To stream out responses from the server
 
-```
+```bash
 curl -N --connect-timeout 10 \
   -H "Content-Type: application/json" \
   -H "Accept: text/event-stream" \
@@ -88,7 +88,12 @@ curl -N --connect-timeout 10 \
    ```
    This will poll for your executable tasks, and run your automation periodically
 
-## Additional Links
+## Additional Examples
+
+- [ConsoleKit OpenAI Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
+- [ConsoleKit Eliza Plugin](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
+
+## References
 
 - [Console Kit Docs](https://github.com/Brahma-fi/console-kit/blob/ft-docs/docs/introduction.md)
 - [Console Kit SDK](https://www.npmjs.com/package/brahma-console-kit)
