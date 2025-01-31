@@ -24,17 +24,17 @@ Example implementations of automated DeFi workflows using Console Kit's infrastr
 
 1. Install dependencies
 
-```
-cd eliza-agent && yarn
+```bash
+cd eliza-agent/packages/plugin-console-kit && yarn
 ```
 
-```
+```bash
 cd kernel-workflow && yarn
 ```
 
 2. Set up environment variables and fill all values
 
-```
+```bash
 mv .env.example .env
 ```
 
@@ -42,30 +42,16 @@ mv .env.example .env
 
 ### Eliza Agent
 
-1. Install the agent and its plugins:
-
-```bash
-cd eliza-agent
-yarn install
-```
-
-2. Build the plugins:
+1. Build the plugins:
 
 ```bash
 yarn build
 ```
 
-3. All plugins can be found in the `packages` directory:
+2. All plugins can be found in the `packages` directory:
 
    - Console Kit Plugin: `packages/plugin-console-kit`
    - Additional plugins can be added to the `packages` directory
-
-4. To use the agent in your application, import and configure the plugins as needed:
-
-```typescript
-import { ConsoleKitPlugin } from "@eliza/plugin-console-kit";
-// Configure and use the plugin in your application
-```
 
 ### Kernel Workflow
 
