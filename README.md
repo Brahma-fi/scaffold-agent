@@ -12,9 +12,9 @@ This scaffold serves as a starting point for developers looking to build autonom
 
 The repository contains two core components:
 
-### Agent Server
+### OpenAI Agent
 
-A LangChain-based implementation showing how to create LLM agents that can execute DeFi operations through Console Kit. The server integrates Console Kit's native tools (cross-chain bridges, swap routing, token transfers etc.) into a LangChain executor, enabling natural language driven DeFi automation.
+A LangChain-based implementation showing how to create LLM agents that can execute DeFi operations through Console Kit. The agent integrates Console Kit's native tools (cross-chain bridges, swap routing, token transfers etc.) into a LangChain executor, enabling natural language driven DeFi automation.
 
 ### Kernel Workflow
 
@@ -25,7 +25,7 @@ Example implementations of automated DeFi workflows using Console Kit's infrastr
 1. Install dependencies
 
 ```
-cd agent-server && yarn
+cd openai-agent && yarn
 ```
 
 ```
@@ -40,17 +40,17 @@ mv .env.example .env
 
 ## Running components
 
-### Agent Server
+### OpenAI Agent
 
 1. Run from root dir to spin up the LLM agent server
 
 ```
-make run-server
+make run-agent
 ```
 
-2. All the agent's tools can be found [here](agent-server/src/tools), and any new tools can be configured.
+2. All the agent's tools can be found [here](openai-agent/src/tools), and any new tools can be configured.
 
-3. To stream out responses from the server
+3. To stream out responses from the agent
 
 ```
 curl -N --connect-timeout 10 \
