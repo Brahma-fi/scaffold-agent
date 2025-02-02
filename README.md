@@ -68,4 +68,4 @@ mv .env.example .env
 - [Console Kit Docs](https://github.com/Brahma-fi/console-kit/blob/ft-docs/docs/introduction.md)
 - [Console Kit SDK](https://www.npmjs.com/package/brahma-console-kit)
 - [Brahma Builder](https://github.com/Brahma-fi/brahma-builder)
-- [Discord](https://discord.com/invite/khXHEnvS6N) (Join to get Console API credentials)
+- [Brahma Builders Telegram Group]([https://discord.com/invite/khXHEnvS6N](https://t.me/+O5fFUPVBFvU3ZjY1)) (Join to get Console your API credentials)
