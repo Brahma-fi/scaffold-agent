@@ -61,7 +61,7 @@ const updateAutomation = async (
     const updateTx = await safe.createTransaction({
       transactions: transactions,
       onlyCalls: false
-    });
+    }); // safe sdk can also alternatively be used to create & propose tx: https://docs.safe.global/reference-sdk-protocol-kit/transactions/createtransaction
     console.log("[safe-update-tx]", { updateTx });
 
     const {
