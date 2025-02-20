@@ -7,7 +7,8 @@
     "deploy-account": "ts-node src/deploy-automation-account.ts",
     "register-executor": "ts-node src/register-executor.ts",
     "agent-workflow": "ts-node src/agent-workflow.ts",
-    "update-automation": "ts-node src/update-automation.ts"
+    "update-automation": "ts-node src/update-automation.ts",
+    "cancel-automation": "ts-node src/cancel-automation.ts"
   },
   "keywords": [],
   "author": "",
