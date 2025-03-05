@@ -18,7 +18,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@anthropic-ai/model-context-protocol": "^0.1.0",
+        "@modelcontextprotocol/sdk": "^1.6.1",
         "brahma-console-kit": "^1.0.0",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",

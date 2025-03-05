@@ -1,4 +1,4 @@
-import { createServer } from "@anthropic-ai/model-context-protocol";
+import { createServer } from "@modelcontextprotocol/sdk";
 import { ServerConfig } from "./config";
 import {
   senderTool,
@@ -12,33 +12,33 @@ import {
 } from "./tools";
 
 async function main() {
-  const server = createServer({
-    serverName: "consolekit-mcp-server",
-    serverDescription: "MCP server for ConsoleKit blockchain operations",
+  const server = await createServer({
+    name: "consolekit-mcp-server",
+    description: "MCP server for ConsoleKit blockchain operations",
     tools: [
       {
         name: senderToolMetadata.name,
         description: senderToolMetadata.description,
         parameters: senderToolMetadata.parameters,
-        execute: senderTool,
+        function: senderTool,
       },
       {
         name: bridgerToolMetadata.name,
         description: bridgerToolMetadata.description,
         parameters: bridgerToolMetadata.parameters,
-        execute: bridgerTool,
+        function: bridgerTool,
       },
       {
         name: swapperToolMetadata.name,
         description: swapperToolMetadata.description,
         parameters: swapperToolMetadata.parameters,
-        execute: swapperTool,
+        function: swapperTool,
       },
       {
         name: bridgeStatusToolMetadata.name,
         description: bridgeStatusToolMetadata.description,
         parameters: bridgeStatusToolMetadata.parameters,
-        execute: bridgeStatusTool,
+        function: bridgeStatusTool,
       },
     ],
     resources: [],
