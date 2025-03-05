@@ -17,3 +17,12 @@ run-register-executor:
 
 run-agent-workflow:
 	cd kernel-workflow && yarn agent-workflow
+
+run-mcp-server:
+	cd mcp-server && npm run dev
+
+build-mcp-server:
+	cd mcp-server && npm run build
+
+start-mcp-server:
+	cd mcp-server && npm start

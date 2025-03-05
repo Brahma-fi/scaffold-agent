@@ -10,7 +10,11 @@ This scaffold serves as a starting point for developers looking to build autonom
 
 ## Overview
 
-The repository contains two core components:
+The repository contains three core components:
+
+### MCP Server (NEW)
+
+A Model Context Protocol (MCP) server implementation that exposes ConsoleKit's blockchain operations directly to LLMs like Claude. This allows LLMs to interact with blockchain operations without requiring an intermediate agent server.
 
 ### Agent Server
 
@@ -32,6 +36,10 @@ cd agent-server && yarn
 cd kernel-workflow && yarn
 ```
 
+```bash
+cd mcp-server && npm install
+```
+
 2. Set up environment variables and fill all values
 
 ```bash
@@ -39,6 +47,23 @@ mv .env.example .env
 ```
 
 ## Running components
+
+### MCP Server
+
+1. Run from root dir to spin up the MCP server
+
+```bash
+cd mcp-server && npm run dev
+```
+
+2. The MCP server exposes the following tools:
+
+   - **sender**: Transfer native or ERC20 tokens to a recipient
+   - **bridger**: Bridge tokens between different chains
+   - **swapper**: Swap tokens on a specific chain
+   - **bridgeStatus**: Check the status of a bridge transaction
+
+3. Connect to the MCP server from Claude Desktop or any other MCP client.
 
 ### Agent Server
 
@@ -92,5 +117,6 @@ curl -N --connect-timeout 10 \
 
 - [Console Kit Docs](https://github.com/Brahma-fi/console-kit/blob/ft-docs/docs/introduction.md)
 - [Console Kit SDK](https://www.npmjs.com/package/brahma-console-kit)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
 - [Brahma Builder](https://github.com/Brahma-fi/brahma-builder)
 - [Discord](https://discord.com/invite/khXHEnvS6N) (Join to get Console API credentials)
