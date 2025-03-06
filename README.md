@@ -62,6 +62,7 @@ mv .env.example .env
 - [ConsoleKit LangChain Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 - [ConsoleKit OpenAI Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
 - [ConsoleKit Eliza Plugin](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
+- [ConsoleKit MCP Server](https://github.com/Brahma-fi/scaffold-agent/tree/ft-mcpserver)
 
 ## References
 
