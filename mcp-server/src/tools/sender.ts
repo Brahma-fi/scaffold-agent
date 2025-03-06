@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { Address, ConsoleKit } from "brahma-console-kit";
 import { ConsoleKitConfig } from "../config";
-import { Tool } from "../types";
 
 const senderSchema = z.object({
   chainId: z.number(),
@@ -56,56 +55,3 @@ export const senderToolMetadata = {
   parameters: senderSchema,
 };
 
-export const sender: Tool = {
-  name: "sender",
-  description: "Send native tokens to a recipient",
-  schema: z.object({
-    chain: z.string().describe("The chain to send tokens on"),
-    recipient: z.string().describe("The recipient address"),
-    amount: z.string().describe("The amount to send for the transfer"),
-    token: z.string().describe("The token address to send"),
-    accountAddress: z.string().describe("The account address to send from"),
-  }),
-  execute: async ({
-    chainId,
-    recipient,
-    amount,
-    token,
-    accountAddress,
-  }: {
-    chainId: number;
-    recipient: string;
-    amount: string;
-    token: string;
-    accountAddress: string;
-  }) => {
-    try {
-      const consoleKit = new ConsoleKit(
-        ConsoleKitConfig.apiKey,
-        ConsoleKitConfig.baseUrl
-      );
-
-      const { data } = await consoleKit.coreActions.send(
-        chainId,
-        accountAddress,
-        {
-          amount: amount,
-          to: recipient as Address,
-          tokenAddress: token as Address,
-        }
-      );
-
-      return {
-        success: true,
-        data: {
-          transactions: data.transactions,
-        },
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-  },
-};

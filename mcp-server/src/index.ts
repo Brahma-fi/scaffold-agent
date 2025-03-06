@@ -23,22 +23,34 @@ async function main() {
   server.tool(
     senderToolMetadata.name,
     senderToolMetadata.description,
-    senderTool
+    senderToolMetadata.parameters.shape,
+    async (args) => ({
+      content: [{ type: "text", text: await senderTool(args) }],
+    })
   );
   server.tool(
     bridgerToolMetadata.name,
     bridgerToolMetadata.description,
-    bridgerTool
+    bridgerToolMetadata.parameters.shape,
+    async (args) => ({
+      content: [{ type: "text", text: await bridgerTool(args) }],
+    })
   );
   server.tool(
     swapperToolMetadata.name,
     swapperToolMetadata.description,
-    swapperTool
+    swapperToolMetadata.parameters.shape,
+    async (args) => ({
+      content: [{ type: "text", text: await swapperTool(args) }],
+    })
   );
   server.tool(
     bridgeStatusToolMetadata.name,
     bridgeStatusToolMetadata.description,
-    bridgeStatusTool
+    bridgeStatusToolMetadata.parameters.shape,
+    async (args) => ({
+      content: [{ type: "text", text: await bridgeStatusTool(args) }],
+    })
   );
 
   // Add prompts
