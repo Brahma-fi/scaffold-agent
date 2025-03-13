@@ -32,7 +32,8 @@ export async function swapperTool(params: SwapperParams): Promise<string> {
       `${SLIPPAGE}`,
       chainId
     );
-    const [swapRoute] = swapRouteData;
+
+    const [swapRoute] = (swapRouteData as any).data;
 
     const { data } = await consoleKit.coreActions.swap(
       chainId,
@@ -63,4 +64,3 @@ export const swapperToolMetadata = {
   description: "Generates calldata for swapping tokens on a specific chain",
   parameters: swapperSchema,
 };
-
