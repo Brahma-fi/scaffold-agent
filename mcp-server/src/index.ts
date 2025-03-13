@@ -1,6 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { ServerConfig } from "./config";
 import {
   senderTool,
   senderToolMetadata,
@@ -11,7 +10,6 @@ import {
   bridgeStatusTool,
   bridgeStatusToolMetadata,
 } from "./tools";
-import { z } from "zod";
 
 async function main() {
   const server = new McpServer({
