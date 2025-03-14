@@ -7,20 +7,13 @@ const senderSchema = z.object({
   chainId: z.number(),
   receiverAddress: z.string(),
   transferAmount: z.string(),
-  accountAddress: z.string(),
-  tokenAddress: z.string()
+  tokenAddress: z.string(),
 });
 
 export type SenderParams = z.infer<typeof senderSchema>;
 
 export async function senderTool(params: SenderParams): Promise<string> {
-  const {
-    chainId,
-    receiverAddress,
-    transferAmount,
-    accountAddress,
-    tokenAddress
-  } = params;
+  const { chainId, receiverAddress, transferAmount, tokenAddress } = params;
 
   const consoleKit = new ConsoleKit(
     ConsoleKitConfig.apiKey,
@@ -30,11 +23,11 @@ export async function senderTool(params: SenderParams): Promise<string> {
   try {
     const { data } = await consoleKit.coreActions.send(
       chainId,
-      accountAddress as Address,
+      process.env.USER_CONSOLE_ADDRESS as Address,
       {
         amount: transferAmount,
         to: receiverAddress as Address,
-        tokenAddress: tokenAddress as Address
+        tokenAddress: tokenAddress as Address,
       }
     );
 
@@ -51,5 +44,5 @@ export const senderToolMetadata = {
   name: "sender",
   description:
     "Generates calldata for transferring native or ERC20 tokens to a recipient",
-  parameters: senderSchema
+  parameters: senderSchema,
 };

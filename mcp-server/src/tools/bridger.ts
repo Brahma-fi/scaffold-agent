@@ -8,25 +8,17 @@ const SLIPPAGE = 1;
 const bridgerSchema = z.object({
   chainIdIn: z.number(),
   chainIdOut: z.number(),
-  account: z.string(),
   tokenIn: z.string(),
   tokenOut: z.string(),
-  inputTokenAmount: z.string()
+  inputTokenAmount: z.string(),
 });
 
 export type BridgerParams = z.infer<typeof bridgerSchema>;
 
 export async function bridgerTool(params: BridgerParams): Promise<string> {
-  const {
-    chainIdIn,
-    chainIdOut,
-    tokenIn,
-    tokenOut,
-    inputTokenAmount,
-    account
-  } = params;
+  const { chainIdIn, chainIdOut, tokenIn, tokenOut, inputTokenAmount } = params;
 
-  const accountAddress = account as Address;
+  const accountAddress = process.env.USER_CONSOLE_ADDRESS as Address;
   const consoleKit = new ConsoleKit(
     ConsoleKitConfig.apiKey,
     ConsoleKitConfig.baseUrl
@@ -42,7 +34,7 @@ export async function bridgerTool(params: BridgerParams): Promise<string> {
       recipient: accountAddress,
       slippage: SLIPPAGE,
       tokenIn,
-      tokenOut
+      tokenOut,
     });
 
     const { data } = await consoleKit.coreActions.bridge(
@@ -58,7 +50,7 @@ export async function bridgerTool(params: BridgerParams): Promise<string> {
         route: bridgeRoute,
         tokenIn: tokenIn as Address,
         tokenOut: tokenOut as Address,
-        slippage: SLIPPAGE
+        slippage: SLIPPAGE,
       }
     );
 
@@ -75,5 +67,5 @@ export const bridgerToolMetadata = {
   name: "bridger",
   description:
     "Generates calldata for bridging ERC20 tokens from one chain to another",
-  parameters: bridgerSchema
+  parameters: bridgerSchema,
 };

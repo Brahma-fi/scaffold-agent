@@ -18,7 +18,6 @@ export type SwapperParams = z.infer<typeof swapperSchema>;
 export async function swapperTool(params: SwapperParams): Promise<string> {
   const { chainId, tokenIn, tokenOut, inputTokenAmount, account } = params;
 
-  const accountAddress = account as Address;
   const consoleKit = new ConsoleKit(
     ConsoleKitConfig.apiKey,
     ConsoleKitConfig.baseUrl
@@ -28,7 +27,7 @@ export async function swapperTool(params: SwapperParams): Promise<string> {
     const { data: swapRouteData } = await consoleKit.coreActions.getSwapRoutes(
       tokenIn as Address,
       tokenOut as Address,
-      accountAddress,
+      process.env.USER_CONSOLE_ADDRESS as Address,
       inputTokenAmount,
       `${SLIPPAGE}`,
       chainId
@@ -38,7 +37,7 @@ export async function swapperTool(params: SwapperParams): Promise<string> {
 
     const { data } = await consoleKit.coreActions.swap(
       chainId,
-      accountAddress,
+      process.env.USER_CONSOLE_ADDRESS as Address,
       {
         amountIn: inputTokenAmount,
         chainId,

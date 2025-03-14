@@ -16,19 +16,19 @@ export const sendSafeTransaction = async (
   const _ownerPK = process.env.USER_EOA_PRIVATE_KEY!;
   const _consoleAddress = process.env.USER_CONSOLE_ADDRESS!;
   const _rpcUrl = process.env.JSON_RPC_URL;
-
+  console.log("[safe-tx]", { _ownerPK, _consoleAddress, _rpcUrl });
   if (!_ownerPK || !_consoleAddress || !_rpcUrl) throw new Error("invalid env");
 
-  const _provider = new ethers.providers.JsonRpcProvider(_rpcUrl);
+  const _provider = new ethers.JsonRpcProvider(_rpcUrl);
   const _ownerEoa = new ethers.Wallet(_ownerPK, _provider);
 
   const safe = await Safe.init({
     provider: _rpcUrl,
-    safeAddress: _consoleAddress
+    safeAddress: _consoleAddress,
   });
   const safeTx = await safe.createTransaction({
     transactions: _transactions,
-    onlyCalls: false
+    onlyCalls: false,
   });
   console.log("[safe-tx]", { safeTx });
 
@@ -41,7 +41,7 @@ export const sendSafeTransaction = async (
     refundReceiver,
     safeTxGas,
     to,
-    value
+    value,
   } = safeTx.data;
   const signature = encodePacked(
     ["bytes12", "address", "bytes32", "bytes1"],
@@ -49,7 +49,7 @@ export const sendSafeTransaction = async (
       "0x000000000000000000000000",
       _ownerEoa.address as Address,
       "0x0000000000000000000000000000000000000000000000000000000000000000",
-      "0x01"
+      "0x01",
     ]
   );
 
@@ -67,8 +67,8 @@ export const sendSafeTransaction = async (
       gasPrice,
       gasToken,
       refundReceiver,
-      signature
-    ])
+      signature,
+    ]),
   });
   await tx.wait(2);
 
