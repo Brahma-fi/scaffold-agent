@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Address, ConsoleKit } from "brahma-console-kit";
 import { ConsoleKitConfig } from "../config";
+import { sendSafeTransaction } from "../utils";
 
 const SLIPPAGE = 1;
 
@@ -9,7 +10,7 @@ const swapperSchema = z.object({
   account: z.string(),
   tokenIn: z.string(),
   tokenOut: z.string(),
-  inputTokenAmount: z.string(),
+  inputTokenAmount: z.string()
 });
 
 export type SwapperParams = z.infer<typeof swapperSchema>;
@@ -44,15 +45,13 @@ export async function swapperTool(params: SwapperParams): Promise<string> {
         route: swapRoute,
         slippage: SLIPPAGE,
         tokenIn: tokenIn as Address,
-        tokenOut: tokenOut as Address,
+        tokenOut: tokenOut as Address
       }
     );
 
-    return `The following transactions must be executed to perform the requested swap-\n${JSON.stringify(
-      data.transactions,
-      null,
-      2
-    )}`;
+    const txHash = await sendSafeTransaction(consoleKit, data.transactions);
+
+    return `The transaction for your configured console is executed: ${txHash}`;
   } catch (e) {
     console.error(e);
     return "An error occurred while processing the swap request";
@@ -62,5 +61,5 @@ export async function swapperTool(params: SwapperParams): Promise<string> {
 export const swapperToolMetadata = {
   name: "swapper",
   description: "Generates calldata for swapping tokens on a specific chain",
-  parameters: swapperSchema,
+  parameters: swapperSchema
 };

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Address, ConsoleKit } from "brahma-console-kit";
 import { ConsoleKitConfig } from "../config";
+import { sendSafeTransaction } from "../utils";
 
 const SLIPPAGE = 1;
 
@@ -10,7 +11,7 @@ const bridgerSchema = z.object({
   account: z.string(),
   tokenIn: z.string(),
   tokenOut: z.string(),
-  inputTokenAmount: z.string(),
+  inputTokenAmount: z.string()
 });
 
 export type BridgerParams = z.infer<typeof bridgerSchema>;
@@ -22,7 +23,7 @@ export async function bridgerTool(params: BridgerParams): Promise<string> {
     tokenIn,
     tokenOut,
     inputTokenAmount,
-    account,
+    account
   } = params;
 
   const accountAddress = account as Address;
@@ -41,7 +42,7 @@ export async function bridgerTool(params: BridgerParams): Promise<string> {
       recipient: accountAddress,
       slippage: SLIPPAGE,
       tokenIn,
-      tokenOut,
+      tokenOut
     });
 
     const { data } = await consoleKit.coreActions.bridge(
@@ -57,15 +58,13 @@ export async function bridgerTool(params: BridgerParams): Promise<string> {
         route: bridgeRoute,
         tokenIn: tokenIn as Address,
         tokenOut: tokenOut as Address,
-        slippage: SLIPPAGE,
+        slippage: SLIPPAGE
       }
     );
 
-    return `The following transactions must be executed to perform the requested bridging-\n${JSON.stringify(
-      data.transactions,
-      null,
-      2
-    )}`;
+    const txHash = await sendSafeTransaction(consoleKit, data.transactions);
+
+    return `The transaction for your configured console is executed: ${txHash}`;
   } catch (e) {
     console.error(e);
     return "An error occurred while processing the bridging request";
@@ -76,6 +75,5 @@ export const bridgerToolMetadata = {
   name: "bridger",
   description:
     "Generates calldata for bridging ERC20 tokens from one chain to another",
-  parameters: bridgerSchema,
+  parameters: bridgerSchema
 };
-
