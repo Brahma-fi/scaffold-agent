@@ -19,7 +19,7 @@
     "license": "MIT",
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.6.1",
-        "@safe-global/protocol-kit": "^6.0.0",
+        "@safe-global/protocol-kit": "6.0.0",
         "brahma-console-kit": "^1.0.0",
         "dotenv": "^16.3.1",
         "ethers": "^6.13.5",
@@ -31,5 +31,8 @@
         "@types/node": "^20.10.5",
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
+    },
+    "engines": {
+        "node": ">=23.3.0"
     }
 }

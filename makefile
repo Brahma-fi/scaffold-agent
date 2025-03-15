@@ -21,3 +21,6 @@ build-mcp-server:
 
 start-mcp-server:
 	cd mcp-server && npm start
+
+test-mcp-server:
+	cd mcp-server && npm run test

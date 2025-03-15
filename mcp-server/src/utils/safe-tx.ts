@@ -16,7 +16,6 @@ export const sendSafeTransaction = async (
   const _ownerPK = process.env.USER_EOA_PRIVATE_KEY!;
   const _consoleAddress = process.env.USER_CONSOLE_ADDRESS!;
   const _rpcUrl = process.env.JSON_RPC_URL;
-  console.log("[safe-tx]", { _ownerPK, _consoleAddress, _rpcUrl });
   if (!_ownerPK || !_consoleAddress || !_rpcUrl) throw new Error("invalid env");
 
   const _provider = new ethers.JsonRpcProvider(_rpcUrl);
@@ -30,7 +29,6 @@ export const sendSafeTransaction = async (
     transactions: _transactions,
     onlyCalls: false,
   });
-  console.log("[safe-tx]", { safeTx });
 
   const {
     baseGas,

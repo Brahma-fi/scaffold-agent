@@ -53,7 +53,7 @@ async function main() {
   );
 
   //TODO: add prompts for better tool usage
-
+ 
   // Start server with stdio transport
   const transport = new StdioServerTransport();
   await server.connect(transport);
