@@ -12,7 +12,7 @@ This scaffold serves as a starting point for developers looking to build autonom
 
 ### Kernel Workflow
 
-Example implementations of automated DeFi workflows using Console Kit's infrastructure. These examples demonstrate how to set up autonomous agents that can execute complex DeFi strategies while leveraging Console's policy engine and execution framework.
+Example implementations of automated DeFi workflows using Console Kit's infrastructure. These examples demonstrates how to set up simple automation that transfers when balance is above certain threshold that user provides.
 
 ## Local setup
 
@@ -57,7 +57,7 @@ mv .env.example .env
    ```
    This will poll for your executable tasks, and run your automation periodically
 
-## Additional Examples
+## Additional Agent Based Examples
 
 - [ConsoleKit LangChain Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 - [ConsoleKit OpenAI Agent](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)

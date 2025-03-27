@@ -9,8 +9,8 @@ run-deploy-account:
 run-register-executor:
 	cd kernel-workflow && yarn register-executor
 
-run-agent-workflow:
-	cd kernel-workflow && yarn agent-workflow
+run-automation-workflow:
+	cd kernel-workflow && yarn automation-workflow
 
 run-update-automation:
 	cd kernel-workflow && yarn update-automation
