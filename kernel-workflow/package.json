@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy-account": "ts-node src/deploy-automation-account.ts",
-    "register-executor": "ts-node src/register-executor.ts",
-    "automation-workflow": "ts-node src/automation-workflow.ts",
-    "update-automation": "ts-node src/update-automation.ts",
-    "cancel-automation": "ts-node src/cancel-automation.ts"
+    "deploy-account": "npx tsx src/deploy-automation-account.ts",
+    "register-executor": "npx tsx src/register-executor.ts",
+    "automation-workflow": "npx tsx src/automation-workflow.ts",
+    "update-automation": "npx tsx src/update-automation.ts",
+    "cancel-automation": "npx tsx src/cancel-automation.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +18,7 @@
     "brahma-console-kit": "^1.0.17",
     "ethers": "^6.13.5",
     "ethers-multisend": "^3.1.0",
-    "ts-node": "^10.9.2",
+    "npx tsx": "^10.9.2",
     "typescript": "^5.7.3"
   }
 }
