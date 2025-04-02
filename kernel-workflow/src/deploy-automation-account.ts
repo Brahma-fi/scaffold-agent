@@ -18,11 +18,11 @@ const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
 /// configure according to required subscription
 const AutomationSubscriptionParams = {
   inputToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc
-  inputAmount: BigInt(1000000), // 10 usdc
+  inputAmount: BigInt(10000000), // 10 usdc
   inputTokenPerIterationLimit: BigInt(2000000), // 2 usdc,
   duration: 0,
   metadata: {
-    every: "60s", // configure to required automation interval,
+    every: "86400s", // configure to required automation interval,
     baseToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc,
     preferredVaults: PreferredMorphoVaults
   }

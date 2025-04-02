@@ -16,7 +16,7 @@ export class MorphoClient {
   ): Promise<VaultInfo[]> {
     const query = `
       query GetVaults($asset: [String!], $chainId: [Int!], $first: Int!, $vaults: [String!]) {
-        vaults(where: { assetAddress_in: $asset, chainId_in: $chainId, whitelisted: true, address_in: $vaults }, orderBy: "NetApy", orderDirection: "Desc", first: $first) {
+        vaults(where: { assetAddress_in: $asset, chainId_in: $chainId, whitelisted: true, address_in: $vaults }, orderBy: NetApy, orderDirection: Desc, first: $first) {
           items {
             id
             address

@@ -14,12 +14,15 @@ const ConsoleApiKey = process.env.CONSOLE_API_KEY!;
 const ConsoleBaseUrl = process.env.CONSOLE_BASE_URL!;
 const ExecutorClientID = process.env.EXECUTOR_CLIENT_ID!;
 
+const CONSOLE_FEE_RECEIVER = "0xEf59f0AD1bE369189e7dD30Fb474263a87400C73";
+
 /// configure according to required executor config for console registration
 const ExecutorConfigConsole: ConsoleExecutorConfig = {
   clientId: ExecutorClientID,
   executor: ethers.computeAddress(ExecutorEoaPK),
   feeReceiver: ethers.ZeroAddress as Address,
-  hopAddresses: PreferredMorphoVaults, // morpho preferred vault addresses to whitelist in policy
+  hopAddresses: [...PreferredMorphoVaults, CONSOLE_FEE_RECEIVER], // morpho preferred vault addresses to whitelist in policy
+  // NOTE: console fee receiver must be whitelisted
   inputTokens: ["0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"], // base usdc
   limitPerExecution: true,
   timestamp: new Date().getTime()

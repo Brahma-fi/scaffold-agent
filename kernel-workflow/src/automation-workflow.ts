@@ -143,7 +143,7 @@ class RebalancingStrategy {
       const balance = await tokenContract.balanceOf(subaccount);
       console.log("Available balance:", balance.toString());
 
-      if (balance.isZero()) {
+      if (balance === "0") {
         return { skip: true, message: "No balance available for deposit" };
       }
 
@@ -219,17 +219,32 @@ class RebalancingStrategy {
       };
 
       const {
-        data: { transactions }
+        data: { transactions: withdrawTransactions }
       } = await this.consoleKit.coreActions.morphoWithdraw(
         chainId,
         subaccount,
         withdrawParams
       );
 
+      const depositParams = {
+        inputToken: baseToken,
+        inputAmount: [expectedAssets.toString()],
+        vaults: [toVaultAddress],
+        slippage: 2 // 2% slippage
+      };
+
+      const {
+        data: { transactions: depositTransactions }
+      } = await this.consoleKit.coreActions.morphoDeposit(
+        chainId,
+        subaccount,
+        depositParams
+      );
+
       return {
         skip: false,
         message: `Withdrawing from ${fromVaultAddress} (will deposit to ${toVaultAddress} after)`,
-        transactions
+        transactions: [...withdrawTransactions, ...depositTransactions]
       };
     } catch (error: any) {
       console.error("Error handling rebalance:", error);
@@ -254,7 +269,7 @@ async function pollTasksAndSubmit(
       0,
       10
     );
-    console.log(`Found ${tasks.length} tasks`);
+    console.log(`[${registryId}] Found ${tasks.length} tasks`);
 
     const morphoClient = new MorphoClient(MorphoGraphqlUrl);
     const strategy = new RebalancingStrategy(morphoClient, consoleKit);
@@ -284,6 +299,7 @@ async function pollTasksAndSubmit(
             executorAddress,
             chainId
           );
+        console.log({ executorNonce });
 
         // Execute transaction
         const success = await executeTransaction(
@@ -324,10 +340,15 @@ async function executeTransaction(
   successMessage: string
 ): Promise<boolean> {
   // For multiple transactions, use the encodeMulti function
-  const transaction =
+  let transaction =
     transactions.length > 1
       ? encodeMulti(transactions, consoleKit.getContractAddress("MULTI_SEND"))
       : transactions[0];
+  transaction = {
+    ...transaction,
+    value: BigInt(transaction.value).toString()
+  };
+  console.log({ transaction });
 
   // Generate executable digest
   const { domain, message, types } =
@@ -351,6 +372,7 @@ async function executeTransaction(
   );
 
   // Submit task
+  console.log("submitting task");
   await consoleKit.automationContext.submitTask({
     id: taskId,
     payload: {
@@ -387,7 +409,7 @@ async function executeTransaction(
       5000
     );
     console.log(
-      `[complete] ${successMessage} - workflow state: ${workflowState?.status}`
+      `[complete] ${successMessage} - workflow state: ${workflowState?.status}; txHash: ${workflowState.out?.outputTxHash}`
     );
     return true;
   } catch (error) {
