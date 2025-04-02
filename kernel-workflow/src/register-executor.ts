@@ -6,6 +6,7 @@ import {
 } from "brahma-console-kit";
 import { ethers, Wallet } from "ethers";
 import { ExecutorMetadata } from "./entity";
+import { PreferredMorphoVaults } from "./config";
 
 const ExecutorEoaPK = process.env.EXECUTOR_EOA_PRIVATE_KEY!;
 const JsonRpcUrl = process.env.JSON_RPC_URL!;
@@ -18,7 +19,7 @@ const ExecutorConfigConsole: ConsoleExecutorConfig = {
   clientId: ExecutorClientID,
   executor: ethers.computeAddress(ExecutorEoaPK),
   feeReceiver: ethers.ZeroAddress as Address,
-  hopAddresses: ["0xAE75B29ADe678372D77A8B41225654138a7E6ff1"], // addresses that tokens will be moved through during execution
+  hopAddresses: PreferredMorphoVaults, // morpho preferred vault addresses to whitelist in policy
   inputTokens: ["0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"], // base usdc
   limitPerExecution: true,
   timestamp: new Date().getTime()
@@ -26,7 +27,7 @@ const ExecutorConfigConsole: ConsoleExecutorConfig = {
 
 /// configure according to required executor metadata
 const ExecutorMetadata: ExecutorMetadata = {
-  name: "scaffold-agent-executor",
+  name: "morpho-agent-executor",
   logo: "",
   metadata: {}
 };

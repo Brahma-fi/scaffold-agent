@@ -6,7 +6,6 @@ import {
   VendorCancelAutomationParams
 } from "brahma-console-kit";
 import { ethers, Wallet } from "ethers";
-import { encodeMulti } from "ethers-multisend";
 import { encodePacked } from "viem";
 import { SafeABI } from "./entity/abi";
 
@@ -119,7 +118,8 @@ const cancelAutomation = async (
     data: {
       execViaSubAcc: AutomationCancelData.execViaSubAcc,
       sweepTokens: AutomationCancelData.sweepTokens,
-      ownerConsole: CONSOLE_ADDRESS
+      ownerConsole: CONSOLE_ADDRESS,
+      sweepTokenReceiver: CONSOLE_ADDRESS
     },
     subAccountAddress: SUBACCOUNT_ADDRESS
   };

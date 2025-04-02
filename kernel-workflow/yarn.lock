@@ -264,6 +264,14 @@
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.1.tgz#5738f6d765710921e7a751e00c20ae091ed8db0f"
 
+"@peculiar/asn1-schema@^2.3.13":
+  version "2.3.15"
+  resolved "https://registry.yarnpkg.com/@peculiar/asn1-schema/-/asn1-schema-2.3.15.tgz#e926bfdeed51945a06f38be703499e7d8341a5d3"
+  dependencies:
+    asn1js "^3.0.5"
+    pvtsutils "^1.3.6"
+    tslib "^2.8.1"
+
 "@rollup/plugin-typescript@^11.1.6":
   version "11.1.6"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-11.1.6.tgz#724237d5ec12609ec01429f619d2a3e7d4d1b22b"
@@ -278,6 +286,36 @@
     "@types/estree" "^1.0.0"
     estree-walker "^2.0.2"
     picomatch "^4.0.2"
+
+"@safe-global/protocol-kit@^6.0.0":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@safe-global/protocol-kit/-/protocol-kit-6.0.2.tgz#5bd43a51fbc3c6d7f8b2f90a40ecbba61b9b8f05"
+  dependencies:
+    "@safe-global/safe-deployments" "^1.37.31"
+    "@safe-global/safe-modules-deployments" "^2.2.7"
+    "@safe-global/types-kit" "^2.0.1"
+    abitype "^1.0.2"
+    semver "^7.7.1"
+    viem "^2.21.8"
+  optionalDependencies:
+    "@noble/curves" "^1.6.0"
+    "@peculiar/asn1-schema" "^2.3.13"
+
+"@safe-global/safe-deployments@^1.37.31":
+  version "1.37.31"
+  resolved "https://registry.yarnpkg.com/@safe-global/safe-deployments/-/safe-deployments-1.37.31.tgz#582120fb2468a0f3bb284f0d3c6c94bb61b151f7"
+  dependencies:
+    semver "^7.6.2"
+
+"@safe-global/safe-modules-deployments@^2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@safe-global/safe-modules-deployments/-/safe-modules-deployments-2.2.7.tgz#8d9cabea778767776de2dc62258dcc458f2f2c14"
+
+"@safe-global/types-kit@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@safe-global/types-kit/-/types-kit-2.0.1.tgz#f2334a33fa430beceba017bd7dbb112269f61f30"
+  dependencies:
+    abitype "^1.0.2"
 
 "@scure/base@~1.2.2", "@scure/base@~1.2.4":
   version "1.2.4"
@@ -330,7 +368,7 @@
   dependencies:
     undici-types "~6.20.0"
 
-abitype@1.0.8, abitype@^1.0.6:
+abitype@1.0.8, abitype@^1.0.2, abitype@^1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.8.tgz#3554f28b2e9d6e9f35eb59878193eabd1b9f46ba"
 
@@ -352,6 +390,14 @@ arg@^4.1.0:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.3.tgz#269fc7ad5b8e42cb63c896d5666017261c144089"
 
+asn1js@^3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/asn1js/-/asn1js-3.0.6.tgz#53e002ebe00c5f7fd77c1c047c3557d7c04dce25"
+  dependencies:
+    pvtsutils "^1.3.6"
+    pvutils "^1.1.3"
+    tslib "^2.8.1"
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
@@ -372,15 +418,16 @@ bn.js@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.1.tgz#0bc527a6a0d18d0aa8d5b0538ce4a77dccfa7b70"
 
-brahma-console-kit@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.6.tgz#a28701bc40297a4c8e5e1d933f66b1c777e5e27d"
+brahma-console-kit@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/brahma-console-kit/-/brahma-console-kit-1.0.17.tgz#19837f4aaa6c36c028e99de53ec9a49aa5407e86"
   dependencies:
     "@rollup/plugin-typescript" "^11.1.6"
+    "@safe-global/protocol-kit" "^6.0.0"
     axios "^1.7.9"
     rollup-plugin-dts "^6.1.1"
     tslib "^2.8.1"
-    viem "^2.21.3"
+    viem "^2.23.11"
 
 brorand@^1.1.0:
   version "1.1.0"
@@ -536,9 +583,9 @@ minimalistic-crypto-utils@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
 
-ox@0.6.7:
-  version "0.6.7"
-  resolved "https://registry.yarnpkg.com/ox/-/ox-0.6.7.tgz#afd53f2ecef68b8526660e9d29dee6e6b599a832"
+ox@0.6.9:
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/ox/-/ox-0.6.9.tgz#da1ee04fa10de30c8d04c15bfb80fe58b1f554bd"
   dependencies:
     "@adraffy/ens-normalize" "^1.10.1"
     "@noble/curves" "^1.6.0"
@@ -564,6 +611,16 @@ proxy-from-env@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
 
+pvtsutils@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/pvtsutils/-/pvtsutils-1.3.6.tgz#ec46e34db7422b9e4fdc5490578c1883657d6001"
+  dependencies:
+    tslib "^2.8.1"
+
+pvutils@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/pvutils/-/pvutils-1.1.3.tgz#f35fc1d27e7cd3dfbd39c0826d173e806a03f5a3"
+
 resolve@^1.22.1:
   version "1.22.10"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.22.10.tgz#b663e83ffb09bbf2386944736baae803029b8b39"
@@ -579,6 +636,10 @@ rollup-plugin-dts@^6.1.1:
     magic-string "^0.30.10"
   optionalDependencies:
     "@babel/code-frame" "^7.24.2"
+
+semver@^7.6.2, semver@^7.7.1:
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
 
 supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
@@ -626,9 +687,9 @@ v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/v8-compile-cache-lib/-/v8-compile-cache-lib-3.0.1.tgz#6336e8d71965cb3d35a1bbb7868445a7c05264bf"
 
-viem@^2.21.3:
-  version "2.22.16"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.22.16.tgz#f23e3a92284df3d05434d21fbf40b76b8f0b01b6"
+viem@^2.21.8, viem@^2.23.11:
+  version "2.24.3"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.24.3.tgz#e34f686eed9d19caa2e8a162a29a85bee4efc21e"
   dependencies:
     "@noble/curves" "1.8.1"
     "@noble/hashes" "1.7.1"
@@ -636,16 +697,16 @@ viem@^2.21.3:
     "@scure/bip39" "1.5.4"
     abitype "1.0.8"
     isows "1.0.6"
-    ox "0.6.7"
-    ws "8.18.0"
+    ox "0.6.9"
+    ws "8.18.1"
 
 ws@8.17.1:
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.17.1.tgz#9293da530bb548febc95371d90f9c878727d919b"
 
-ws@8.18.0:
-  version "8.18.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
+ws@8.18.1:
+  version "8.18.1"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.1.tgz#ea131d3784e1dfdff91adb0a4a116b127515e3cb"
 
 yn@3.1.1:
   version "3.1.1"

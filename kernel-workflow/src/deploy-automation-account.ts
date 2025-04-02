@@ -21,9 +21,8 @@ const AutomationSubscriptionParams = {
   inputTokenPerIterationLimit: BigInt(2000000), // 2 usdc,
   duration: 0,
   metadata: {
-    every: "60s", // configure to required automation interval
-    receiver: "0xAE75B29ADe678372D77A8B41225654138a7E6ff1", // configure to required receiver address
-    transferAmount: "200000" // configure to required transfer amount per iteration
+    every: "60s", // configure to required automation interval,
+    baseToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address // base usdc
   }
 };
 
@@ -134,7 +133,7 @@ const signAndDeployAutomationAccount = async (
   const deploymentSignature = await _userWallet.signTypedData(
     {
       verifyingContract: domain.verifyingContract,
-      chainId: fromHex(domain.chainId as Address, "number")
+      chainId: fromHex(domain.chainId as any, "number")
     },
     types,
     message
