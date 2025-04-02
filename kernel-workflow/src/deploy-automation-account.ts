@@ -7,6 +7,7 @@ import {
 import { ethers, JsonRpcProvider, Wallet } from "ethers";
 import { erc20Abi, fromHex } from "viem";
 import { poll } from "./utils";
+import { PreferredMorphoVaults } from "./config";
 
 const UserEoaPK = process.env.USER_EOA_PRIVATE_KEY!; /// This user must have enough tokens to fund deployments & automation subscription deposits
 const ExecutorRegistryId = process.env.EXECUTOR_REGISTRY_ID!;
@@ -22,7 +23,8 @@ const AutomationSubscriptionParams = {
   duration: 0,
   metadata: {
     every: "60s", // configure to required automation interval,
-    baseToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address // base usdc
+    baseToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as Address, // base usdc,
+    preferredVaults: PreferredMorphoVaults
   }
 };
 
